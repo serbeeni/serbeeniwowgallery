@@ -1,323 +1,39 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>My Site</title>
-    <link rel="shortcut icon" href="">
-    <meta name="viewport" content="width=device-width,initial-scale=1">
-    <link rel="alternate" type="application/rss+xml" href="#">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Serbeeni WoW Gallery — dev</title>
 
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Inter:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <!--
+      Development harness only. It stands in for what Tumblr renders server-side, in exactly
+      the shape `theme/theme.html` produces, so `npm run dev` exercises the real parser.
+      `vite build` ignores this file — the build entry is src/main.tsx.
+    -->
+    <div id="root"></div>
 
-    <style>
-        /* --- (kept your original CSS mostly unchanged) --- */
-        :root {
-            --bg-color: #1a1c1e;
-            --card-bg: #22252a;
-            --text-main: #f0f2f5;
-            --text-muted: #9aa0a6;
-            --max-width: 1400px;
-        }
-        * { box-sizing: border-box; margin:0; padding:0; }
-        body {
-            background-image: url('https://64.media.tumblr.com/8cf71ec3070c868f526b1ed00da77432/27f0076f1576f10e-4e/s2048x3072/b1f53ee684193f7548cdd3bc7c51bd2b07a3ad35.pnj');
-            background-repeat: repeat;
-            background-size: auto;
-            background-attachment: fixed;
-            background-position: center;
-            color: var(--text-main);
-            font-family: 'Inter', sans-serif;
-            margin: 0;
-            padding: 0;
-        }
-        .blog-header { display:flex; flex-direction:column; align-items:center; justify-content:center; width:100%; padding:20px 20px 10px 20px; text-align:center; }
-        .blog-title { text-align:center; margin:0; }
-        .blog-title h1 { font-family: 'Cinzel', serif !important; font-size:2.8rem; font-weight:700; letter-spacing:0.12em; text-transform:uppercase; margin-bottom:0.5rem; }
-        .blog-title h1 a { color:#ffcc00; text-decoration:none !important; border-bottom:none !important; font-family:'Cinzel', serif !important; text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000; }
-        .blog-bio { text-align:center; max-width:850px; font-size:1.05rem; color:var(--text-muted); line-height:1.7; margin:0.5rem auto 0 auto; }
-
-        /* Controls & buttons (trimmed) */
-        .controls-wrapper { max-width:900px; margin:0 auto 2rem auto; display:flex; gap:10px; width:100%; align-items:center; }
-        .toggle-btn { border:none; background:none; cursor:pointer; display:inline-block; vertical-align:middle; color:#ffcc00; font-family:'Cinzel', serif !important; font-size:13px; font-weight:700; text-shadow:1px 1px 0 #000; text-transform:uppercase; letter-spacing:0.05em; border-style:solid; border-width:14px; border-image-source:url('https://64.media.tumblr.com/bfcae680f8325c36b4f88e62fb9de74b/c1c27d4513c34757-20/s1280x1920/14a063c2fef70486ed480fe75b40c920a238fd77.pnj'); border-image-slice:36 fill; border-image-repeat:repeat; padding:0 16px; white-space:nowrap; position:relative; text-align:center; box-shadow:0 4px 12px rgba(0,0,0,0.3); transition:filter 0.2s; height:40px; line-height:12px; }
-        .toggle-btn:hover { color:#fffcf0; filter: brightness(1.3) drop-shadow(0 0 5px rgba(255,204,0,0.4)); }
-        .load-btn-wrapper { position:relative; display:inline-block; }
-        .load-bar-track { position:absolute; bottom:-6px; left:0; width:100%; height:3px; background: rgba(212,175,55,0.2); border-radius:2px; opacity:0; pointer-events:none; transition:opacity 0.15s ease; overflow:hidden; }
-        .load-bar-track.active { opacity:1; }
-        .load-bar-fill { width:0%; height:100%; background:#d4af37; box-shadow:0 0 6px #d4af37, 0 0 2px #997519; position:absolute; left:0; transition: width 0.3s ease-out; }
-
-        /* content containers */
-        #contentContainer { transition: opacity 0.2s ease; }
-        #contentContainer.stream-view { max-width:900px; margin:0 auto; display:flex; flex-direction:column; gap:4rem; }
-        #contentContainer.stream-view article.post { background:var(--card-bg); border-radius:8px; overflow:hidden; border-style:solid; border-width:28px; border-image-source:url('https://64.media.tumblr.com/265b54e0678d3c1fb514c528bf74596f/2b2e4c379a19f487-c8/s250x400/f8768a3be47882762c529bcdb96adf22de796eee.pnj'); border-image-slice:45 fill; border-image-repeat:repeat; box-shadow:0 12px 35px rgba(0,0,0,0.5); padding:1.5rem 2rem; scroll-margin-top:5rem; }
-        #contentContainer.stream-view .post-body-render img { max-width:100%; height:auto; display:block; margin:0 auto 1rem auto; border-radius:6px; }
-
-        #contentContainer.grid-view { max-width:var(--max-width); margin:2rem auto 4rem auto; display:grid; grid-template-columns:repeat(5,1fr); gap:20px; border-style:solid; border-width:28px; border-image-source:url('https://64.media.tumblr.com/265b54e0678d3c1fb514c528bf74596f/2b2e4c379a19f487-c8/s250x400/f8768a3be47882762c529bcdb96adf22de796eee.pnj'); border-image-slice:45 fill; border-image-repeat:repeat; box-shadow:0 16px 45px rgba(0,0,0,0.6); padding:2.5rem; }
-        #contentContainer.grid-view article.post { background:var(--card-bg); border-radius:6px; overflow:hidden; box-shadow:0 4px 15px rgba(0,0,0,0.2); cursor:pointer; transition:transform 0.2s ease, box-shadow 0.2s ease; padding:0; position:relative; width:100%; padding-top:56.25%; }
-        #contentContainer.grid-view .grid-snap-wrapper { display:block !important; position:absolute; top:0; left:0; width:100%; height:100%; overflow:hidden; background:#111; }
-        #contentContainer.grid-view .grid-snap-wrapper img { width:100%; height:100%; object-fit:cover; margin:0; }
-
-        .post-body-render, .post-body-render p, .caption-fallback { color:#ffffff !important; font-family:'Arial Narrow', Arial, sans-serif !important; font-size:1rem; }
-
-        .back-to-top { position:fixed; bottom:2rem; right:2rem; background:rgba(45,49,56,0.85); backdrop-filter:blur(6px); color:#f0f2f5; border:1px solid rgba(255,255,255,0.1); width:46px; height:46px; border-radius:8px; font-size:1.1rem; cursor:pointer; display:flex; align-items:center; justify-content:center; box-shadow:0 6px 20px rgba(0,0,0,0.4); z-index:999; opacity:0; pointer-events:none; transition:opacity 0.2s ease, transform 0.2s ease, background 0.2s ease; }
-        .back-to-top.visible { opacity:1; pointer-events:auto; }
-
-        .infinite-scroll-status { text-align:center; padding:3rem 0; color:var(--text-muted); font-size:0.9rem; font-weight:500; letter-spacing:0.05em; text-transform:uppercase; font-family:'Cinzel', serif; }
-
-        .version-tag { position:fixed; bottom:10px; right:10px; font-family:'Inter', sans-serif; font-size:0.65rem; color:rgba(255,255,255,0.15); pointer-events:none; z-index:1000; user-select:none; }
-
-        @media (max-width:992px) { #contentContainer.grid-view { grid-template-columns:repeat(2,1fr); } .controls-wrapper { max-width:100%; padding:0 1rem; } }
-        @media (max-width:768px) { body { padding:1.5rem 0.5rem; } .blog-title h1 { font-size:2rem; } #contentContainer.stream-view { gap:2.5rem; } .back-to-top { bottom:1.5rem; right:1.5rem; width:40px; height:40px; } }
-
-        /* (other CSS rules preserved as in original, trimmed in this file for brevity) */
-    </style>
-</head>
-<body>
-
-<header class="blog-header" id="topAnchor">
-    <div class="blog-title">
-        <h1><a href="/" id="siteTitle">My Site</a></h1>
-    </div>
-    <div class="blog-description blog-bio" id="siteDescription" style="display:none"></div>
-</header>
-
-<div class="controls-wrapper">
-    <div class="menu-container">
-        <button class="toggle-btn" onclick="toggleMenu()">Menu ▼</button>
-        <div id="dropdownMenu" class="dropdown-content" style="display:none;">
-            <a href="/">Home</a>
-        </div>
+    <div id="tumblr-config">
+      <span data-field="title">Serbeeni WoW Gallery</span>
+      <div data-field="description">Screenshots from a long trip through Azeroth.</div>
+      <div data-field="pages"><a href="/guide">Guide</a><a href="/about">About</a></div>
     </div>
 
-    <div class="menu-container">
-        <button class="toggle-btn" onclick="toggleFilterMenu()">Filter ▼</button>
-        <div id="filterMenu" class="dropdown-content" style="display:none;"></div>
+    <div id="tumblr-source">
+      <article class="tumblr-post" data-post-id="1" data-post-type="text" data-permalink="/dev/notes.html" data-note-count="24"><div class="tumblr-post-body"><p>A quiet morning under the world tree. - Darnassus</p></div></article>
+      <article class="tumblr-post" data-post-id="2" data-post-type="photo" data-photo-url="https://64.media.tumblr.com/8cf71ec3070c868f526b1ed00da77432/27f0076f1576f10e-4e/s2048x3072/b1f53ee684193f7548cdd3bc7c51bd2b07a3ad35.pnj" data-permalink="/dev/notes.html" data-note-count="7"><div class="tumblr-post-caption"><p>Moonwell at dusk - Ashenvale</p></div></article>
+      <article class="tumblr-post" data-post-id="3" data-post-type="photo" data-photo-url="https://64.media.tumblr.com/8cf71ec3070c868f526b1ed00da77432/27f0076f1576f10e-4e/s2048x3072/b1f53ee684193f7548cdd3bc7c51bd2b07a3ad35.pnj" data-permalink="/dev/notes.html" data-note-count="1"><div class="tumblr-post-caption"><p>The canals - Stormwind City</p></div></article>
+      <article class="tumblr-post" data-post-id="4" data-post-type="photo" data-photo-url="https://64.media.tumblr.com/8cf71ec3070c868f526b1ed00da77432/27f0076f1576f10e-4e/s2048x3072/b1f53ee684193f7548cdd3bc7c51bd2b07a3ad35.pnj" data-permalink="/dev/notes.html" data-note-count="0"><div class="tumblr-post-caption"><p>Deep below the mountain - Blackrock Depths, Searing Gorge</p></div></article>
+      <article class="tumblr-post" data-post-id="5" data-post-type="text" data-permalink="/dev/notes.html" data-note-count="3"><div class="tumblr-post-body"><p>No location tag on this one at all.</p></div></article>
     </div>
 
-    <div class="spacer" style="flex-grow: 1;"></div>
-
-    <div class="load-btn-wrapper">
-        <button class="toggle-btn" id="loadAllBtn" onclick="loadAllPosts()"><span id="loadAllBtnText">Load All</span></button>
-        <div class="load-bar-track" id="loadBarTrack"><div class="load-bar-fill" id="loadBarFill"></div></div>
-    </div>
-    <button class="toggle-btn" id="viewToggle" onclick="toggleLayout()">Switch to Grid</button>
-</div>
-
-<main id="contentContainer" class="stream-view">
-    <!-- Posts will be injected here from posts.json -->
-</main>
-
-<div class="infinite-scroll-status" id="scrollStatus" style="display:none">Loading...</div>
-<button class="back-to-top" id="scrollTopBtn" onclick="scrollToTop()" aria-label="Back to Top">▲</button>
-
-<div class="music-control-wrapper">
-    <button class="toggle-btn" id="musicToggleBtn" onclick="toggleMusic()" aria-label="Toggle Music"><s>♪</s></button>
-    <div id="nowPlayingTrack"><span id="nowPlayingText"></span><input type="range" id="volumeSlider" min="0" max="100" value="100" oninput="changeVolume(this.value)"></div>
-</div>
-
-<div class="version-tag">v3.2.3</div>
-
-<script>
-/* SITE CONFIG — edit these values */
-const SITE = {
-    title: "My Tumblr-to-Site",
-    description: "Trying to turn my tumblr blog into a website.",
-    favicon: "",
-    rss: ""
-};
-
-/* Simple client-side rendering: loads posts.json and renders posts */
-async function fetchPosts() {
-    try {
-        const resp = await fetch('posts.json', {cache: 'no-store'});
-        if (!resp.ok) {
-            console.warn("posts.json not found or failed to load:", resp.status);
-            return [];
-        }
-        return await resp.json();
-    } catch (err) {
-        console.error("Failed to fetch posts.json:", err);
-        return [];
-    }
-}
-
-function createArticleFromPost(post) {
-    const article = document.createElement('article');
-    article.className = 'post';
-    article.id = `post-${post.id || Math.random().toString(36).slice(2,9)}`;
-
-    if (post.type === 'photo' && post.photoUrl) {
-        article.setAttribute('data-raw-src', post.photoUrl);
-    }
-
-    const snap = document.createElement('div');
-    snap.className = 'grid-snap-wrapper';
-    article.appendChild(snap);
-
-    const body = document.createElement('div');
-    body.className = 'post-body-render';
-    if (post.type === 'text') {
-        body.innerHTML = post.body || '';
-    } else if (post.type === 'photo') {
-        const img = document.createElement('img');
-        img.src = post.photoUrl;
-        img.alt = post.alt || 'Gallery Entry';
-        img.loading = 'lazy';
-        body.appendChild(img);
-        if (post.caption) {
-            const caption = document.createElement('div');
-            caption.className = 'caption-fallback';
-            caption.innerHTML = post.caption;
-            body.appendChild(caption);
-        }
-    } else {
-        body.innerHTML = post.body || '';
-    }
-    article.appendChild(body);
-
-    article.onclick = function() { handlePostClick(article.id); };
-    return article;
-}
-
-async function renderAllPosts() {
-    const posts = await fetchPosts();
-    const container = document.getElementById('contentContainer');
-    container.innerHTML = '';
-    if (!posts || posts.length === 0) {
-        const empty = document.createElement('div');
-        empty.style.padding = "2rem";
-        empty.style.textAlign = "center";
-        empty.style.color = "var(--text-muted)";
-        empty.innerText = "No posts found. Add posts to posts.json.";
-        container.appendChild(empty);
-        return;
-    }
-    posts.forEach(p => {
-        const article = createArticleFromPost(p);
-        container.appendChild(article);
-    });
-    generateGridThumbnails(document);
-    buildCaptionFilters();
-}
-
-/* --- Reused UI logic from your theme (menu toggles, grid/stream, thumbnails, filters) --- */
-function closeAllMenus() {
-    document.querySelectorAll('.dropdown-content').forEach(m=>m.style.display="none");
-}
-function toggleMenu(){ const m=document.getElementById('dropdownMenu'); const isOpen=(m.style.display==="block"); closeAllMenus(); m.style.display = isOpen ? "none" : "block"; }
-function toggleFilterMenu(){ const m=document.getElementById('filterMenu'); const isOpen=(m.style.display==="block"); closeAllMenus(); m.style.display = isOpen ? "none" : "block"; }
-window.addEventListener('click', function(e){ if(!e.target.closest('.menu-container')) closeAllMenus(); });
-
-function generateGridThumbnails(targetContext=document) {
-    const posts = targetContext.querySelectorAll('article.post');
-    posts.forEach(post => {
-        const snapWrapper = post.querySelector('.grid-snap-wrapper');
-        if (!snapWrapper) return;
-        let directSrc = post.getAttribute('data-raw-src');
-        if (!directSrc) {
-            const inlineImg = post.querySelector('.post-body-render img');
-            if (inlineImg) directSrc = inlineImg.src;
-        }
-        if (directSrc && snapWrapper.children.length === 0) {
-            const newImg = document.createElement('img');
-            newImg.src = directSrc;
-            newImg.setAttribute('loading', 'lazy');
-            newImg.alt = "Grid Preview Image";
-            snapWrapper.appendChild(newImg);
-        }
-    });
-}
-
-const container = document.getElementById('contentContainer');
-const toggleBtn = document.getElementById('viewToggle');
-const scrollTopBtn = document.getElementById('scrollTopBtn');
-
-function toggleLayout(){ if (!container) return; if (container.classList.contains('stream-view')) { container.classList.remove('stream-view'); container.classList.add('grid-view'); toggleBtn.innerText = "Switch to Column"; } else { container.classList.remove('grid-view'); container.classList.add('stream-view'); toggleBtn.innerText = "Switch to Grid"; } }
-function handlePostClick(postId){ if (!container.classList.contains('grid-view')) return; container.classList.remove('grid-view'); container.classList.add('stream-view'); toggleBtn.innerText="Switch to Grid"; setTimeout(()=>{ const targetPost=document.getElementById(postId); if (targetPost) targetPost.scrollIntoView({behavior:'smooth', block:'start'}); },50); }
-window.addEventListener('scroll', () => { if (window.scrollY > 400) scrollTopBtn.classList.add('visible'); else scrollTopBtn.classList.remove('visible'); });
-
-function scrollToTop(){ window.scrollTo({ top:0, behavior:'smooth' }); }
-
-/* Build filter menu based on post content (looks for "- location" pattern used previously) */
-const FILTER_DICTIONARY = {
-    "Ashenvale":"Kalimdor","Azshara":"Kalimdor","Darnassus":"Kalimdor",
-    "Alterac Mountains":"Eastern Kingdoms","Arathi Highlands":"Eastern Kingdoms",
-    "Ragefire Chasm, Durotar":"Dungeons","Wailing Caverns, The Barrens":"Dungeons"
-    /* truncated subset — you can paste the full dictionary from your original theme if desired */
-};
-
-let currentFilter = 'all';
-function buildCaptionFilters() {
-    const dropdown = document.getElementById('filterMenu');
-    if (!dropdown) return;
-    dropdown.innerHTML = '';
-    const allLink = document.createElement('a'); allLink.textContent = "All"; allLink.href="#"; allLink.onclick = (e)=>{ e.preventDefault(); filterPosts('all'); closeAllMenus(); }; dropdown.appendChild(allLink);
-
-    const posts = document.querySelectorAll('article.post');
-    const locations = new Set();
-    posts.forEach(function(post) {
-        const match = post.textContent.match(/-\s*(.+)$/);
-        if (match) locations.add(match[1].trim());
-    });
-    const sorted = Array.from(locations).sort((a,b)=>a.localeCompare(b,undefined,{sensitivity:'base'}));
-    sorted.forEach(loc => {
-        const a = document.createElement('a');
-        a.textContent = loc;
-        a.href = "#";
-        a.onclick = function(e){ e.preventDefault(); filterPosts(loc); closeAllMenus(); };
-        dropdown.appendChild(a);
-    });
-}
-
-function filterPosts(loc) {
-    if (loc === currentFilter) return;
-    currentFilter = loc;
-    const posts = document.querySelectorAll('article.post');
-    posts.forEach(post => {
-        if (loc === 'all') { post.style.display='block'; } else {
-            const match = post.textContent.match(/-\s*(.+)$/);
-            const postLoc = match ? match[1].trim().toLowerCase() : post.textContent.trim().toLowerCase();
-            post.style.display = (postLoc === loc.toLowerCase()) ? 'block' : 'none';
-        }
-    });
-}
-
-/* loadAllPosts: for this static version, simply ensures all posts are visible */
-async function loadAllPosts(){
-    document.getElementById('loadAllBtn').disabled = true;
-    document.getElementById('loadAllBtnText').innerText = "ALL LOADED";
-    buildCaptionFilters();
-}
-
-/* Music / YouTube code preserved (will run if network available) */
-var tag = document.createElement('script');
-tag.src = "https://www.youtube.com/iframe_api";
-var firstScriptTag = document.getElementsByTagName('script')[0];
-firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-let ytPlayer, isPlayerReady=false, isFirstPlay=true, isPlaying=false;
-const DARNASSUS_VIDEO_ID = 'LYhknuaKiTo';
-const WOW_PLAYLIST_ID = 'PL61E5E1012F567279';
-function onYouTubeIframeAPIReady(){ ytPlayer = new YT.Player('youtube-audio-player', { height:'1', width:'1', videoId:DARNASSUS_VIDEO_ID, playerVars:{'autoplay':0,'controls':0,'disablekb':1}, events:{ 'onReady':function(){ isPlayerReady=true; }, 'onStateChange': onPlayerStateChange } }); }
-function onPlayerStateChange(event){ if (event.data === YT.PlayerState.ENDED && isPlaying) { ytPlayer.seekTo(0); ytPlayer.playVideo(); } if (event.data === YT.PlayerState.PLAYING) updateTrackTitleDisplay(); }
-function updateTrackTitleDisplay(){ const textSpan = document.getElementById('nowPlayingText'); const trackBadge = document.getElementById('nowPlayingTrack'); if (!textSpan || !trackBadge || !ytPlayer || typeof ytPlayer.getVideoData !== 'function') return; const data = ytPlayer.getVideoData(); if (data && data.title && isPlaying) { textSpan.innerText = '♪ '+data.title; trackBadge.classList.add('has-track'); } else { trackBadge.classList.remove('has-track'); } }
-function playRandomPlaylistTrack(){ const randomIndex = Math.floor(Math.random() * 50); ytPlayer.loadPlaylist({ list: WOW_PLAYLIST_ID, listType: 'playlist', index: randomIndex }); }
-window.changeVolume = function(val) { if (ytPlayer && typeof ytPlayer.setVolume === 'function') ytPlayer.setVolume(val); };
-window.toggleMusic = function() { const btn = document.getElementById('musicToggleBtn'); const trackBadge = document.getElementById('nowPlayingTrack'); if (!isPlayerReady) return; if (!isPlaying) { if (isFirstPlay) { ytPlayer.loadVideoById(DARNASSUS_VIDEO_ID); ytPlayer.playVideo(); isFirstPlay=false; } else { playRandomPlaylistTrack(); } isPlaying=true; if (btn) btn.innerHTML="♪"; } else { ytPlayer.pauseVideo(); isPlaying=false; if (btn) btn.innerHTML="<s>♪</s>"; if (trackBadge) trackBadge.classList.remove('has-track'); } };
-
-/* Keyboard shortcuts kept */
-document.addEventListener('keydown', function(e){ const activeTag = document.activeElement ? document.activeElement.tagName : ''; if (['INPUT','TEXTAREA','SELECT'].includes(activeTag) || (document.activeElement && document.activeElement.isContentEditable)) return; if (e.ctrlKey || e.altKey || e.metaKey) return; const code = e.code; const key = e.key ? e.key.toLowerCase() : ''; if (code === 'KeyM' || key === 'm') { e.preventDefault(); toggleMenu(); } else if (code === 'KeyF' || key === 'f') { e.preventDefault(); toggleFilterMenu(); } else if (code === 'KeyL' || key === 'l') { e.preventDefault(); loadAllPosts(); } else if (code === 'KeyG' || key === 'g') { e.preventDefault(); toggleLayout(); } }, true);
-
-/* Initialize site text and load posts */
-document.addEventListener('DOMContentLoaded', () => {
-    document.getElementById('siteTitle').innerText = SITE.title;
-    if (SITE.description) { const d = document.getElementById('siteDescription'); d.innerText = SITE.description; d.style.display = 'block'; }
-    if (SITE.favicon) document.querySelector('link[rel="shortcut icon"]').href = SITE.favicon;
-    if (SITE.rss) document.querySelector('link[rel="alternate"]').href = SITE.rss;
-    renderAllPosts();
-});
-</script>
-
-</body>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
 </html>

@@ -1,0 +1,40 @@
+/* 1. Default / Normal Cursor */
+body,
+html {
+  cursor: url('https://files.catbox.moe/qvf0h3.cur'), auto !important;
+}
+
+/* 2. Hover Cursor for Buttons, Links & Menus */
+a,
+button,
+.toggle-btn,
+.submenu-title,
+.submenu-content a,
+#standaloneSortBtn,
+#musicToggleBtn,
+#scrollTopBtn {
+  cursor: url('https://files.catbox.moe/wi8vl7.cur'), pointer !important;
+}
+
+/* 3. Hover Cursor for Images */
+img,
+.post-body-render img,
+.grid-snap-wrapper img {
+  cursor: url('https://files.catbox.moe/ndwvgc.cur'), zoom-in !important;
+}
+
+/* Note avatars are decoration, not zoomable images. */
+.post-note-avatar {
+  cursor: url('https://files.catbox.moe/qvf0h3.cur'), auto !important;
+}
+
+/* 4. Hover Cursor for Blog Title & Home Link */
+.blog-title h1 a,
+#dropdownMenu a[href='/'] {
+  cursor: url('https://files.catbox.moe/java91.cur'), pointer !important;
+}
+
+/* ONE-TIME QUEST CURSOR FOR GUIDE BUTTON */
+a.has-quest-cursor {
+  cursor: url('https://files.catbox.moe/sawzwx.cur'), pointer !important;
+}
