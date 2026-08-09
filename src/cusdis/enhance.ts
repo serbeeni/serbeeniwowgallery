@@ -14,21 +14,24 @@ function applyStructure(doc: Document) {
     block?.remove()
   }
 
-  // Put the composer below whatever comments already exist. Walking up past single-child
-  // wrappers finds the composer's own block without depending on Cusdis's class names.
+  // Put the composer below the comments. Anchoring on Cusdis's own app container rather than
+  // on whatever happens to wrap the textarea keeps this from depending on its class names,
+  // which are Tailwind utilities and change freely between releases.
   const textarea = doc.querySelector('textarea')
-  if (textarea) {
-    let block: HTMLElement = textarea
-    while (
-      block.parentElement &&
-      block.parentElement !== doc.body &&
-      block.parentElement.children.length === 1
-    ) {
-      block = block.parentElement
-    }
+  const container = doc.getElementById('root')?.firstElementChild
+  if (!textarea || !container) return
 
-    const parent = block.parentElement
-    if (parent && parent.lastElementChild !== block) parent.appendChild(block)
+  let block: HTMLElement = textarea
+  while (
+    block.parentElement &&
+    block.parentElement !== container &&
+    block.parentElement !== doc.body
+  ) {
+    block = block.parentElement
+  }
+
+  if (block.parentElement === container && container.lastElementChild !== block) {
+    container.appendChild(block)
   }
 }
 
