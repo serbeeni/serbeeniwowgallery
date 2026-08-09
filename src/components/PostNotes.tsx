@@ -90,6 +90,8 @@ export function PostNotes({ post, open, onToggle }: PostNotesProps) {
             </button>
           </div>
 
+          {/* Everything below the tabs scrolls as one, so the rail can match the picture. */}
+          <div className="post-notes-body">
           {tab === 'comments' && (
             <CusdisThread post={post} active={open && tab === 'comments'} />
           )}
@@ -163,6 +165,7 @@ export function PostNotes({ post, open, onToggle }: PostNotesProps) {
               </a>
             </div>
           )}
+          </div>
         </div>
       )}
     </div>

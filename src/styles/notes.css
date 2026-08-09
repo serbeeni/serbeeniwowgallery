@@ -57,20 +57,66 @@
     margin-left: calc((900px - var(--post-open-width)) / 2);
 
     grid-template-columns: minmax(0, 1fr) auto 360px;
+    /* The panel occupies the picture's row alone, which is what makes it exactly as tall. */
     grid-template-areas:
       'media  media  panel'
-      'caption toggle panel';
+      'caption toggle .';
     column-gap: 28px;
     align-items: start;
   }
 
   #contentContainer.stream-view article.post.notes-open .post-notes-drawer {
     align-self: stretch;
+    height: 100%;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+
     margin-top: 0;
-    padding-top: 0;
-    padding-left: 24px;
+    padding: 2px 4px 2px 22px;
     border-top: none;
     border-left: 1px solid rgba(255, 204, 0, 0.25);
+    background: linear-gradient(
+      180deg,
+      rgba(255, 204, 0, 0.05),
+      rgba(255, 204, 0, 0) 55%
+    );
+  }
+
+  /* Only the rail scrolls; stacked under the post it grows freely, as before. */
+  #contentContainer.stream-view article.post.notes-open .post-notes-body {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    padding-right: 10px;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 204, 0, 0.45) rgba(0, 0, 0, 0.3);
+  }
+
+  #contentContainer.stream-view
+    article.post.notes-open
+    .post-notes-body::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  #contentContainer.stream-view
+    article.post.notes-open
+    .post-notes-body::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 3px;
+  }
+
+  #contentContainer.stream-view
+    article.post.notes-open
+    .post-notes-body::-webkit-scrollbar-thumb {
+    background: rgba(255, 204, 0, 0.45);
+    border-radius: 3px;
+  }
+
+  #contentContainer.stream-view
+    article.post.notes-open
+    .post-notes-body::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 204, 0, 0.7);
   }
 }
 
