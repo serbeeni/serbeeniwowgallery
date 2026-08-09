@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react'
+import { NOTES_ICON_URL } from '../config/assets'
 import { useNotes } from '../hooks/useNotes'
 import type { TumblrPost } from '../types'
 
@@ -33,15 +34,18 @@ export function PostNotes({ post }: PostNotesProps) {
   return (
     <div className="post-notes">
       <div className="post-notes-bar">
+        {/* Icon only — the count lives in the tooltip so the button stays clean. */}
         <button
-          className="notes-toggle-btn"
+          className={`notes-toggle-btn${open ? ' is-open' : ''}`}
           onClick={(e) => {
             e.stopPropagation()
             setOpen((value) => !value)
           }}
           aria-expanded={open}
+          aria-label={label}
+          title={label}
         >
-          {open ? '▴' : '▾'} {label}
+          <img className="notes-toggle-icon" src={NOTES_ICON_URL} alt="" />
         </button>
       </div>
 
