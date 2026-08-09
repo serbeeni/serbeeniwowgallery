@@ -1,0 +1,13 @@
+[
+  {
+    "id": "1",
+    "type": "text",
+    "body": "<p>This is a sample text post. - Ashenvale</p>"
+  },
+  {
+    "id": "2",
+    "type": "photo",
+    "photoUrl": "https://64.media.tumblr.com/8cf71ec3070c868f526b1ed00da77432/27f0076f1576f10e-4e/s2048x3072/b1f53ee684193f7548cdd3bc7c51bd2b07a3ad35.pnj",
+    "caption": "Sample photo caption - Darnassus"
+  }
+]
