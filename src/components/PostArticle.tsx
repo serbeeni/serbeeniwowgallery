@@ -39,23 +39,15 @@ export function PostArticle({
 
       <div className="post-body-render">
         {photoUrl ? (
-          <>
-            <img
-              src={photoUrl}
-              alt="Gallery Entry"
-              loading="lazy"
-              onClick={(e) => {
-                e.stopPropagation()
-                onImageClick(photoUrl)
-              }}
-            />
-            {post.captionHtml && (
-              <div
-                className="caption-fallback"
-                dangerouslySetInnerHTML={{ __html: post.captionHtml }}
-              />
-            )}
-          </>
+          <img
+            src={photoUrl}
+            alt="Gallery Entry"
+            loading="lazy"
+            onClick={(e) => {
+              e.stopPropagation()
+              onImageClick(photoUrl)
+            }}
+          />
         ) : (
           post.bodyHtml && (
             <div dangerouslySetInnerHTML={{ __html: post.bodyHtml }} />
@@ -63,7 +55,16 @@ export function PostArticle({
         )}
       </div>
 
-      <PostNotes post={post} open={notesOpen} onToggle={onToggleNotes} />
+      {/* Caption and notes toggle share one row; the drawer opens underneath both. */}
+      <div className="post-footer">
+        {photoUrl && post.captionHtml && (
+          <div
+            className="caption-fallback"
+            dangerouslySetInnerHTML={{ __html: post.captionHtml }}
+          />
+        )}
+        <PostNotes post={post} open={notesOpen} onToggle={onToggleNotes} />
+      </div>
     </article>
   )
 }

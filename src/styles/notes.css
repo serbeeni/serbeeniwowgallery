@@ -1,17 +1,36 @@
-/* Grid tiles are pure thumbnails — the drawer belongs to the stream view only. */
-#contentContainer.grid-view .post-notes {
+/* Grid tiles are pure thumbnails — caption and drawer belong to the stream view only. */
+#contentContainer.grid-view .post-footer {
   display: none !important;
 }
 
-.post-notes {
+/*
+ * Caption on the left, notes toggle on the right, one row. The drawer then spans both
+ * columns on the row below — `display: contents` lets PostNotes' children join this grid
+ * instead of forming a box of their own.
+ */
+.post-footer {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 12px;
   margin-top: 1rem;
 }
 
-/* The toggle sits in the post's bottom-right corner. */
+.post-footer .caption-fallback {
+  grid-column: 1;
+  min-width: 0;
+}
+
+.post-notes {
+  display: contents;
+}
+
 .post-notes-bar {
+  grid-column: 2;
   display: flex;
   justify-content: flex-end;
 }
+
 
 /* Icon only, no label — see DJOKA PNG SLIKA ZAMENA in src/config/assets.ts. */
 .notes-toggle-btn {
@@ -51,6 +70,7 @@
 }
 
 .post-notes-drawer {
+  grid-column: 1 / -1;
   margin-top: 0.75rem;
   border-top: 1px solid rgba(255, 204, 0, 0.25);
   padding-top: 0.75rem;
