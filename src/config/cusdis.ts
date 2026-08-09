@@ -1,15 +1,12 @@
 /*
- * ==========================================
- * CUSDIS APP ID — POPUNITI
- * ==========================================
- * 1. Napravi nalog na https://cusdis.com
- * 2. Dodaj sajt (website) za serbeeniwowgallery.tumblr.com
- * 3. Prekopiraj App ID (izgleda kao UUID) i zameni prazan string ispod
+ * Cusdis App ID za serbeeniwowgallery.tumblr.com.
  *
- * Dok je ovo prazno, tab "Comments" prikazuje uputstvo umesto niti — ostatak teme radi
- * normalno. Ako se nekad prebacimo na self-hosted Cusdis, promeni i CUSDIS_HOST.
+ * Nije tajna — stoji u izvornom kodu svake stranice koja koristi Cusdis. Ako se nekad
+ * prebacimo na self-hosted Cusdis, promeni i CUSDIS_HOST.
+ *
+ * Prazan string vraća tab "Comments" na uputstvo umesto niti; ostatak teme radi normalno.
  */
-export const CUSDIS_APP_ID = ''
+export const CUSDIS_APP_ID = 'b5d879f3-d104-42e8-b18e-d7c57762a2ef'
 
 export const CUSDIS_HOST = 'https://cusdis.com'
 
