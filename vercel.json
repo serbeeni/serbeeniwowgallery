@@ -8,12 +8,10 @@
       "source": "/(.*)",
       "headers": [
         {
-          "comment": "Filenames never change, so a cached copy would outlive every update. Revalidate each time; the files are ~50KB and 304s are cheap.",
           "key": "Cache-Control",
           "value": "public, max-age=0, must-revalidate"
         },
         {
-          "comment": "Not needed for <script src> or <link rel=stylesheet>, but makes the sourcemap reachable from the Tumblr origin when debugging.",
           "key": "Access-Control-Allow-Origin",
           "value": "*"
         }
