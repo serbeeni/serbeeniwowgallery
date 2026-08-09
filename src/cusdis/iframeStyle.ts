@@ -79,14 +79,35 @@ textarea {
   color: rgba(216, 195, 157, 0.5) !important;
 }
 
-/* The email field is removed outright; this keeps the row from leaving a gap. */
+/*
+ * The email field is hidden rather than deleted. Removing the node made Svelte rebuild the
+ * form around it, which cost the reply box its focus; hiding it survives every re-render.
+ * The :has rule takes the labelled block with it so the row leaves no gap.
+ */
 .grid.grid-cols-2 {
   grid-template-columns: 1fr !important;
 }
 
 input[name="email"],
-label[for="email"] {
+label[for="email"],
+.px-1:has(input[name="email"]) {
   display: none !important;
+}
+
+/*
+ * Comments first, composer under them. Ordering rather than moving the node — see
+ * applyStructure in enhance.ts for why that matters.
+ */
+.sb-stack {
+  display: flex !important;
+  flex-direction: column !important;
+}
+
+.sb-composer {
+  order: 99 !important;
+  margin-top: 18px !important;
+  padding-top: 16px !important;
+  border-top: 1px solid rgba(255, 204, 0, 0.2) !important;
 }
 
 button {
