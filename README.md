@@ -30,6 +30,13 @@ pa fioka pri prvom otvaranju fetch-uje `{Permalink}` tog posta i pročita `#tumb
 odgovora — isti pristup koji već koristi paginacija. Rezultat se kešira po post id-u, tako da
 se svaki post povlači najviše jednom po učitavanju stranice.
 
+Treći tab, **Comments**, je nešto drugo: Tumblr notes su samo za čitanje jer reply može da
+napiše isključivo ulogovan Tumblr korisnik iz Tumblr-ovog interfejsa. Comments tab ugrađuje
+[Cusdis](https://cusdis.com) — posetiocu ne treba nalog, upiše ime i komentar.
+
+> **Treba popuniti App ID.** Napravi nalog na cusdis.com, dodaj sajt i prekopiraj App ID u
+> `src/config/cusdis.ts`. Dok je prazan, tab prikazuje uputstvo umesto niti.
+
 Dva ograničenja koja dolaze od Tumblr-a:
 
 - **Samo prva strana notes-a.** Ostatak stoji iza Tumblr-ovog "Show more notes" endpointa.
