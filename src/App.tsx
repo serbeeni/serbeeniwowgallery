@@ -33,9 +33,6 @@ export default function App() {
 
   const [viewMode, setViewMode] = useState<ViewMode>('stream')
   const [sortOldestFirst, setSortOldestFirst] = useState(false)
-  // Opening one notes drawer closes the rest: Cusdis reuses one iframe for every thread,
-  // so a second open thread would steal it from the first and leave an empty box behind.
-  const [openNotesId, setOpenNotesId] = useState<string | null>(null)
 
   const menus = useMenus()
   const quest = useQuestIcon()
@@ -64,10 +61,6 @@ export default function App() {
         .getElementById(domId)
         ?.scrollIntoView({ behavior: 'smooth', block: 'start' })
     }, SCROLL_TO_POST_DELAY)
-  }, [])
-
-  const toggleNotes = useCallback((postId: string) => {
-    setOpenNotesId((current) => (current === postId ? null : postId))
   }, [])
 
   const toggleSort = useCallback(() => {
@@ -119,8 +112,6 @@ export default function App() {
         viewMode={viewMode}
         onSelect={selectPost}
         onImageClick={lightbox.open}
-        openNotesId={openNotesId}
-        onToggleNotes={toggleNotes}
       />
 
       {isFetching && (
