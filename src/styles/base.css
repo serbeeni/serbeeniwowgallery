@@ -1,0 +1,80 @@
+:root {
+  --bg-color: #1a1c1e;
+  --card-bg: #22252a;
+  --text-main: #f0f2f5;
+  --text-muted: #9aa0a6;
+  --max-width: 1400px;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: #0e0f12; /* Dark fallback while loading */
+  background-image: url('https://64.media.tumblr.com/8cf71ec3070c868f526b1ed00da77432/27f0076f1576f10e-4e/s2048x3072/b1f53ee684193f7548cdd3bc7c51bd2b07a3ad35.pnj');
+  background-repeat: repeat;
+  background-size: auto;
+  background-attachment: fixed;
+  background-position: center;
+  color: var(--text-main);
+  font-family: 'Inter', sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+/* ANIMATED WEBP BACKGROUND */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: -999;
+  pointer-events: none;
+  background: #0e0f12 url('https://files.catbox.moe/h3bix0.webp') center / cover
+    no-repeat;
+
+  /* Fine-tune ambient brightness, contrast, and blur */
+  filter: brightness(0.75) contrast(1.05) blur(4px);
+
+  /* Slightly scale up so blurred edges do not clip at the screen borders */
+  transform: scale(1.05);
+}
+
+/*
+ * Server-rendered Tumblr markup. React reads these once at boot and renders the real UI
+ * into #root, so they must never be visible or take up space.
+ */
+#tumblr-source,
+#tumblr-config,
+#nextPageLink,
+.pagination {
+  display: none !important;
+}
+
+.infinite-scroll-status {
+  text-align: center;
+  padding: 3rem 0;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  font-family: 'Cinzel', serif;
+}
+
+.version-tag {
+  position: fixed;
+  bottom: 10px;
+  right: 10px;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.65rem;
+  color: rgba(255, 255, 255, 0.15);
+  pointer-events: none;
+  z-index: 1000;
+  user-select: none;
+}

@@ -1,39 +1,83 @@
-# Tumblr theme → Static site (Cloudflare Pages)
+# Serbeeni WoW Gallery — Tumblr tema (React + TypeScript)
 
-This repository contains a static website version of your Tumblr theme adapted for Cloudflare Pages.
+WoW Classic Tumblr tema v3.2.3, prepisana iz jednog HTML fajla u React + TypeScript.
+Funkcionalnost i izgled su nepromenjeni — vidi [MIGRATION_PLAN.md](MIGRATION_PLAN.md) za
+detaljno mapiranje starog koda na novi i za spisak namernih odstupanja.
 
-Files:
-- `index.html` — the converted theme. Edit the SITE config inside it to set the title, description, favicon, and RSS link.
-- `posts.json` — list of posts rendered by client-side JavaScript. Add posts here or generate this file from your Tumblr export.
-  - Each post is an object with:
-    - `id` (string)
-    - `type` ("text" or "photo")
-    - For text posts: `body` (HTML string)
-    - For photo posts: `photoUrl` (image URL), `caption` (optional), `alt` (optional)
-- Any images and other static files can be placed in an `assets/` folder. Update `index.html` to reference them if you want to host assets in this repo.
+## Kako radi
 
-Deploy on Cloudflare Pages:
-1. Create a GitHub repository (or use this one if you already have it).
-2. Commit `index.html`, `posts.json`, and `README.md` to the repo root.
-3. In Cloudflare Pages: Create a new project and connect the repository.
-   - Build command: (leave blank)
-   - Build output directory: `/` (the repository root)
-4. Save and deploy. Pages will serve the static site.
+Tumblr ne dozvoljava build korak, pa je tema podeljena na dva dela:
 
-Optional improvements:
-- Use a Static Site Generator (Eleventy, Hugo, Jekyll) if you'd like a more robust workflow (Markdown posts, templating, permalinks, RSS generation).
-- Download externally hosted assets (cursors/backgrounds) into `/assets/` and update references to avoid hotlinking.
-- Convert your Tumblr post export into `posts.json` automatically with a small script (I can help with that if you can provide the export).
+1. **`theme/theme.html`** — dokument koji se nalepi u Tumblr theme editor. Ne sadrži UI:
+   samo skrivene `{block:Posts}` / `{block:Pages}` blokove kao izvor podataka, prazan
+   `<div id="root">` i `<script src>` na bundle.
+2. **`dist/theme.js` + `dist/theme.css`** — buildovana React aplikacija. Pri startu pročita
+   skriveni markup, pretvori ga u `TumblrPost[]` i od tada renderuje kompletan UI.
 
-If you want me to push these files into your repo:
-- Make the repository public or add access so I can commit. Tell me whether to:
-  - Commit directly to the default branch, or
-  - Create a new branch (please provide the branch name), and open a PR.
+Paginacija radi kao i ranije: `fetch` sledeće Tumblr stranice → `DOMParser` → pročitaj postove
+sa nje. Zato infinite scroll i "Load All" i dalje vuku prave Tumblr stranice.
 
-If you prefer to do it yourself, paste the following commands locally:
+Bundle koristi `preact/compat` (alias u `vite.config.ts`) — izvorni kod je običan React + TS,
+ali runtime je ~15KB umesto ~190KB, što je bitno jer se učitava na svakom page view-u.
+
+## Razvoj
+
 ```bash
-git init
-git add index.html posts.json README.md
-git commit -m "Convert Tumblr theme to static site for Cloudflare Pages"
-git remote add origin <your-github-repo-url>
-git push -u origin main
+npm install
+npm run dev        # http://localhost:5173 — index.html glumi Tumblr sa par mock postova
+npm run typecheck
+npm run build      # → dist/theme.js + dist/theme.css
+```
+
+`index.html` je isključivo dev harness i ne ulazi u build; sadrži isti `#tumblr-source`
+format koji `theme/theme.html` generiše, pa `npm run dev` koristi pravi parser.
+
+## Deploy
+
+Bundle se servira sa jsDelivr-a direktno iz ovog repozitorijuma.
+
+1. `npm run build`
+2. Commituj `dist/` i pushuj
+3. Napravi git tag i GitHub release, npr. `v3.3.0`
+4. U `theme/theme.html` podesi obe URL-e na taj tag i nalepi fajl u
+   Tumblr → Edit Theme → Edit HTML
+
+Kasnije promene: build → commit `dist/` → **novi tag** → izmeni verziju u obe URL-e u temi.
+jsDelivr keš je vezan za tag, pa bez bump-a verzije stari bundle ostaje na sajtu.
+
+Za brzo testiranje bez novog taga možeš privremeno koristiti `@main` i pozvati
+`https://purge.jsdelivr.net/gh/serbeeni/serbeeniwowgallery@main/dist/theme.js` da očistiš keš.
+Za produkciju koristi tagove — `@main` se menja pod nogama.
+
+## Struktura
+
+```
+theme/theme.html        # ono što ide u Tumblr
+index.html              # dev harness
+src/
+  tumblr/               # čitanje {block:Posts} markupa i paginacija
+  hooks/                # podaci, filteri, meniji, lightbox, muzika, hotkey-evi, quest
+  components/           # UI
+  config/               # verzija, asset URL-ovi, FILTER_DICTIONARY (90 lokacija)
+  styles/               # CSS iz originalne teme, podeljen po celinama
+```
+
+## Hotkey-evi
+
+| Taster | Radnja |
+|---|---|
+| `M` | Menu dropdown |
+| `F` | Filter dropdown |
+| `L` | Load All |
+| `G` | Grid / Column |
+| `S` | Newest / Oldest first (tek kad je sve učitano) |
+| `Ctrl+M` | Muzika |
+
+## Podešavanje
+
+- **Lokacije i kategorije filtera** — `src/config/filterDictionary.ts`. Filter čita tekst posta
+  i uzima sve iza prve crte (`... - Ashenvale`), pa lokacija u opisu posta mora da se poklopi
+  sa ključem iz ovog fajla da bi upala u pravu kategoriju.
+- **Muzika** — `src/config/assets.ts` (`DARNASSUS_VIDEO_ID`, `WOW_PLAYLIST_ID`).
+- **Verzija u donjem desnom uglu** — `src/config/site.ts`.
+- **Naslov, opis i stranice u meniju** dolaze iz samog Tumblr-a; ne diraju se u kodu.

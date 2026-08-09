@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{Title}</title>
+    <link rel="shortcut icon" href="{Favicon}">
+    <link rel="alternate" type="application/rss+xml" href="{RSS}">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+
+    {block:Description}
+        <meta name="description" content="{MetaDescription}" />
+    {/block:Description}
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+
+    <!--
+      Theme bundle. Bump the version tag in BOTH URLs below after publishing a release,
+      otherwise jsDelivr keeps serving the cached copy. See README.md.
+    -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/serbeeni/serbeeniwowgallery@v3.3.0/dist/theme.css">
+
+    <!-- Safety net: keep the raw Tumblr markup hidden even if the stylesheet fails to load. -->
+    <style>
+        #tumblr-source, #tumblr-config, #nextPageLink { display: none !important; }
+        body { background: #0e0f12; }
+    </style>
+</head>
+<body>
+
+<!-- React renders the entire UI in here. -->
+<div id="root"></div>
+
+<!--
+  Everything below is data, not UI: Tumblr renders it server-side and the bundle reads it
+  once at boot. Keep the markup on single lines — the location filter parses text content.
+-->
+<div id="tumblr-config">
+    <span data-field="title">{Title}</span>
+    {block:Description}<div data-field="description">{Description}</div>{/block:Description}
+    <div data-field="pages">{block:HasPages}{block:Pages}<a href="{URL}">{Label}</a>{/block:Pages}{/block:HasPages}</div>
+</div>
+
+<div id="tumblr-source">
+    {block:Posts}
+        {block:Text}<article class="tumblr-post" data-post-id="{PostID}" data-post-type="text"><div class="tumblr-post-body">{Body}</div></article>{/block:Text}
+        {block:Photo}<article class="tumblr-post" data-post-id="{PostID}" data-post-type="photo" data-photo-url="{PhotoURL-HighRes}">{block:Caption}<div class="tumblr-post-caption">{Caption}</div>{/block:Caption}</article>{/block:Photo}
+    {/block:Posts}
+</div>
+
+{block:Pagination}{block:NextPage}<a id="nextPageLink" href="{NextPage}">Next</a>{/block:NextPage}{/block:Pagination}
+
+<script src="https://cdn.jsdelivr.net/gh/serbeeni/serbeeniwowgallery@v3.3.0/dist/theme.js" defer></script>
+
+</body>
+</html>

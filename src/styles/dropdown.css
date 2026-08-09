@@ -1,0 +1,147 @@
+.menu-container,
+.dropdown,
+.filter-container,
+.toggle-btn-wrapper {
+  position: relative !important;
+}
+
+.menu-container {
+  display: inline-flex;
+  align-items: center;
+}
+
+/*
+ * Glass & gold frame. Centred under its button, never narrower than it, and allowed to
+ * overflow so the flyout submenus can escape.
+ */
+.dropdown-content,
+#dropdownMenu,
+#filterMenu {
+  position: absolute;
+  top: 110%;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  min-width: 100% !important;
+  width: max-content !important;
+  white-space: nowrap !important;
+  box-sizing: border-box !important;
+  z-index: 9999;
+
+  background: rgba(14, 15, 18, 0.96) !important;
+  backdrop-filter: blur(8px);
+  border: 1px solid #ffcc00 !important;
+  border-radius: 4px !important;
+  box-shadow:
+    0 12px 32px rgba(0, 0, 0, 0.9),
+    0 0 12px rgba(255, 204, 0, 0.25),
+    inset 0 0 15px rgba(0, 0, 0, 0.8) !important;
+  padding: 4px 0 !important;
+  overflow: visible !important;
+}
+
+/* MAKE MENU & FILTER BUTTONS THE EXACT SAME SIZE */
+.menu-container button,
+.filter-container button,
+.dropdown > button {
+  min-width: 105px !important;
+  text-align: center !important;
+}
+
+.dropdown-content a,
+.dropdown-content a:link,
+.dropdown-content a:visited,
+.submenu-title,
+.submenu-content a {
+  display: block !important;
+  color: #d8c39d !important;
+  font-family: 'Cinzel', serif !important;
+  font-size: 12px !important;
+  letter-spacing: 0.08em !important;
+  text-transform: uppercase !important;
+  text-decoration: none !important;
+  padding: 9px 16px !important;
+  border-top: none !important;
+  border-bottom: none !important;
+  background: transparent !important;
+  text-align: center !important;
+  justify-content: center !important;
+  transition:
+    background 0.15s ease,
+    color 0.15s ease,
+    text-shadow 0.15s ease !important;
+}
+
+/* Top-level links (like "All") match the category headers in weight. */
+.dropdown-content > a {
+  font-weight: 600 !important;
+}
+
+/* CATEGORY SUBMENU HEADERS */
+.submenu-title {
+  display: flex !important;
+  align-items: center !important;
+  color: #ffcc00 !important;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.submenu-item {
+  position: relative !important;
+}
+
+/* SUBMENU FLYOUT POPUPS — not centred, they hang off the right edge. */
+.submenu-content {
+  display: none;
+  position: absolute !important;
+  left: 100% !important;
+  top: 0 !important;
+  transform: none !important;
+  min-width: 200px;
+  background: rgba(10, 11, 14, 0.98) !important;
+  border: 1px solid rgba(255, 204, 0, 0.6) !important;
+  border-radius: 3px !important;
+  box-shadow:
+    0 8px 24px rgba(0, 0, 0, 0.95),
+    0 0 8px rgba(255, 204, 0, 0.2) !important;
+  padding: 8px 0;
+  z-index: 10000;
+}
+
+.submenu-item:hover > .submenu-content {
+  display: block !important;
+}
+
+/* Glow the text only — no box highlight, and no shifting on hover. */
+.dropdown-content a:hover,
+.submenu-content a:hover,
+.submenu-title:hover {
+  background: transparent !important;
+  color: #ffffff !important;
+  text-shadow: 0 0 8px rgba(255, 209, 0, 0.8) !important;
+  padding-left: 16px !important;
+  padding-right: 16px !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  transform: none !important;
+}
+
+.submenu-title:hover {
+  color: #fffcf0 !important;
+}
+
+/*
+ * Replaces the "Please wait..." link the theme used to rewrite with a MutationObserver:
+ * same look, but inert from the start.
+ */
+.dropdown-static-item {
+  padding: 10px 15px;
+  font-family: 'Cinzel', serif;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  text-align: center;
+  color: #ffcc00;
+  opacity: 0.6;
+  cursor: default;
+  background: none;
+}

@@ -1,0 +1,227 @@
+.controls-wrapper {
+  max-width: 900px;
+  margin: 0 auto 2rem auto;
+  display: flex;
+  gap: 10px;
+  width: 100%;
+  align-items: center;
+}
+
+.toggle-btn {
+  border: none;
+  background: none;
+  cursor: pointer;
+  display: inline-block;
+  vertical-align: middle;
+  color: #ffcc00; /* Classic WoW Gold */
+
+  font-family: 'Cinzel', serif !important;
+  font-size: 13px;
+  font-weight: 700;
+  text-shadow: 1px 1px 0 #000;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+
+  border-style: solid;
+  border-width: 14px;
+  border-image-source: url('https://64.media.tumblr.com/bfcae680f8325c36b4f88e62fb9de74b/c1c27d4513c34757-20/s1280x1920/14a063c2fef70486ed480fe75b40c920a238fd77.pnj');
+  border-image-slice: 36 fill;
+  border-image-repeat: repeat;
+
+  padding: 0 16px;
+  white-space: nowrap;
+  position: relative;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+
+  transition: filter 0.2s;
+  height: 40px;
+  line-height: 12px;
+}
+
+.toggle-btn:hover {
+  color: #fffcf0;
+  background: none !important;
+  border-color: transparent !important;
+  filter: brightness(1.3) drop-shadow(0 0 5px rgba(255, 204, 0, 0.4));
+}
+
+.toggle-btn:active {
+  border-image-source: url('https://64.media.tumblr.com/ebd3d619086b190048d0a67a600263d9/c1c27d4513c34757-a8/s1280x1920/09756b92d68377f3c8dacf829027422d2689e622.pnj') !important;
+  border-image-slice: 36 fill !important;
+  border-image-repeat: repeat !important;
+
+  transform: none !important;
+  filter: none !important;
+  transition: none !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3) !important;
+}
+
+#loadAllBtn:disabled {
+  opacity: 1 !important;
+  cursor: default !important;
+  pointer-events: none !important;
+  box-shadow: none !important;
+}
+
+.load-btn-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.load-bar-track {
+  position: absolute;
+  bottom: -6px;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: rgba(212, 175, 55, 0.2);
+  border-radius: 2px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.15s ease;
+  overflow: hidden;
+}
+
+.load-bar-track.active {
+  opacity: 1;
+}
+
+.load-bar-fill {
+  width: 0%;
+  height: 100%;
+  background: #d4af37;
+  box-shadow:
+    0 0 6px #d4af37,
+    0 0 2px #997519;
+  position: absolute;
+  left: 0;
+  transition: width 0.3s ease-out;
+}
+
+/* LOCK SORT BUTTON WIDTH & CENTER TEXT */
+#standaloneSortBtn,
+#sortToggleBtn {
+  width: 160px !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  display: inline-flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  text-align: center !important;
+  box-sizing: border-box !important;
+}
+
+/* LOCK GRID/COLUMN TOGGLE BUTTON WIDTH & CENTER TEXT */
+#viewToggle {
+  width: 185px !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  display: inline-flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  text-align: center !important;
+  box-sizing: border-box !important;
+}
+
+/* BACK TO TOP BUTTON */
+.back-to-top {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  background: rgba(45, 49, 56, 0.85);
+  backdrop-filter: blur(6px);
+  color: #f0f2f5;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  width: 46px;
+  height: 46px;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+  z-index: 999;
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    opacity 0.2s ease,
+    transform 0.2s ease,
+    background 0.2s ease;
+}
+
+.back-to-top.visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* The gold frame overrides the plain rounded box above. */
+#scrollTopBtn {
+  border-radius: 0 !important;
+  background: none !important;
+  width: 44px !important;
+  height: 44px !important;
+  padding: 0 !important;
+
+  border-style: solid !important;
+  border-width: 14px !important;
+  border-image-source: url('https://64.media.tumblr.com/bfcae680f8325c36b4f88e62fb9de74b/c1c27d4513c34757-20/s1280x1920/14a063c2fef70486ed480fe75b40c920a238fd77.pnj') !important;
+  border-image-slice: 36 fill !important;
+  border-image-repeat: repeat !important;
+
+  color: #ffcc00 !important;
+  font-family: 'Cinzel', serif !important;
+  font-size: 14px !important;
+  font-weight: 700 !important;
+  text-shadow: 1px 1px 0 #000 !important;
+
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3) !important;
+  transition: filter 0.2s ease !important;
+}
+
+#scrollTopBtn:hover {
+  transform: none !important;
+  background: none !important;
+  border-color: transparent !important;
+  filter: brightness(1.3) drop-shadow(0 0 5px rgba(255, 204, 0, 0.4)) !important;
+}
+
+#scrollTopBtn:active {
+  border-image-source: url('https://64.media.tumblr.com/ebd3d619086b190048d0a67a600263d9/c1c27d4513c34757-a8/s1280x1920/09756b92d68377f3c8dacf829027422d2689e622.pnj') !important;
+  border-image-slice: 36 fill !important;
+  border-image-repeat: repeat !important;
+  transform: none !important;
+  filter: none !important;
+}
+
+/* QUEST EXCLAMATION MARK */
+.quest-icon-above {
+  position: absolute;
+  top: -18px; /* Floating snugly right above MENU */
+  left: 50%;
+  transform: translateX(-50%);
+  height: 14px; /* Small & proportional */
+  width: auto;
+  pointer-events: none;
+  animation: questBounce 1.8s ease-in-out infinite;
+  z-index: 100;
+}
+
+.quest-icon-inline {
+  height: 13px; /* Fits inside the line height of the dropdown link */
+  width: auto;
+  margin-left: 6px; /* Placed to the RIGHT of the text */
+  vertical-align: middle;
+  display: inline-block;
+}
+
+@keyframes questBounce {
+  0%,
+  100% {
+    transform: translate(-50%, 0);
+  }
+  50% {
+    transform: translate(-50%, -4px);
+  }
+}
