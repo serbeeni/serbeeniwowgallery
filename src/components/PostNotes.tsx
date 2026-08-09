@@ -64,6 +64,10 @@ export function PostNotes({ post, open, onToggle }: PostNotesProps) {
 
       {open && (
         <div className="post-notes-drawer" onClick={(e) => e.stopPropagation()}>
+          <div className="post-notes-title">
+            {tab === 'comments' ? 'Comments' : label}
+          </div>
+
           <div className="post-notes-tabs">
             <button
               className={tab === 'all' ? 'is-active' : undefined}

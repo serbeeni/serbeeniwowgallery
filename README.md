@@ -22,8 +22,12 @@ ali runtime je ~15KB umesto ~190KB, što je bitno jer se učitava na svakom page
 
 ## Komentari (notes)
 
-Svaki post ima u donjem desnom uglu dugme sa brojem notes-a; klik otvara fioku pune širine
-ispod sadržaja posta, sa tabovima **All** i **Replies**.
+Svaki post ima u donjem desnom uglu ikonicu; klik otvara panel sa komentarima, sa tabovima
+**All**, **Replies** i **Comments**.
+
+Na širokim ekranima (≥1200px) otvoreni post se proširi izvan kolone od 900px i panel stane
+desno od sadržaja — slika ostaje iste veličine kao pre otvaranja. Ispod te širine panel pada
+pod post, preko cele širine.
 
 Tumblr u temi daje notes samo na permalink stranici (`{block:PermalinkPage}{block:PostNotes}`),
 pa fioka pri prvom otvaranju fetch-uje `{Permalink}` tog posta i pročita `#tumblr-notes` iz

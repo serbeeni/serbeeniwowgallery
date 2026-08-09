@@ -45,7 +45,7 @@ export function PostArticle({
 
   return (
     <article
-      className="post"
+      className={`post${notesOpen ? ' notes-open' : ''}`}
       id={domId}
       data-raw-src={post.photoUrl ?? undefined}
       onClick={() => {

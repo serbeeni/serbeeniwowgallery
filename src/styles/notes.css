@@ -1,34 +1,77 @@
-/* Grid tiles are pure thumbnails — caption and drawer belong to the stream view only. */
+/* Grid tiles are pure thumbnails — caption and panel belong to the stream view only. */
 #contentContainer.grid-view .post-footer {
   display: none !important;
 }
 
 /*
- * Caption on the left, notes toggle on the right, one row. The drawer then spans both
- * columns on the row below — `display: contents` lets PostNotes' children join this grid
- * instead of forming a box of their own.
+ * The post itself is the grid. `.post-footer` and `.post-notes` are pass-through wrappers so
+ * the caption, the toggle and the comments panel can all be placed against the same tracks —
+ * otherwise the panel would be trapped inside the footer row.
  */
-.post-footer {
-  display: grid;
-  grid-template-columns: 1fr auto;
-  align-items: center;
-  gap: 12px;
-  margin-top: 1rem;
-}
-
-.post-footer .caption-fallback {
-  grid-column: 1;
-  min-width: 0;
-}
-
+.post-footer,
 .post-notes {
   display: contents;
 }
 
-.post-notes-bar {
-  grid-column: 2;
+#contentContainer.stream-view article.post {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-areas:
+    'media  media'
+    'caption toggle'
+    'panel  panel';
+  column-gap: 12px;
+  align-items: center;
+}
+
+#contentContainer.stream-view .post-body-render {
+  grid-area: media;
+}
+
+#contentContainer.stream-view .caption-fallback {
+  grid-area: caption;
+  min-width: 0;
+  margin-top: 1rem;
+}
+
+#contentContainer.stream-view .post-notes-bar {
+  grid-area: toggle;
   display: flex;
   justify-content: flex-end;
+  margin-top: 1rem;
+}
+
+#contentContainer.stream-view .post-notes-drawer {
+  grid-area: panel;
+}
+
+/*
+ * On a wide screen the open post breaks out of the 900px column and puts its comments in a
+ * proper right-hand rail. Widening rather than splitting the existing width keeps the
+ * picture the size it was before the panel appeared.
+ */
+@media (min-width: 1200px) {
+  #contentContainer.stream-view article.post.notes-open {
+    --post-open-width: min(1320px, 94vw);
+    width: var(--post-open-width);
+    margin-left: calc((900px - var(--post-open-width)) / 2);
+
+    grid-template-columns: minmax(0, 1fr) auto 360px;
+    grid-template-areas:
+      'media  media  panel'
+      'caption toggle panel';
+    column-gap: 28px;
+    align-items: start;
+  }
+
+  #contentContainer.stream-view article.post.notes-open .post-notes-drawer {
+    align-self: stretch;
+    margin-top: 0;
+    padding-top: 0;
+    padding-left: 24px;
+    border-top: none;
+    border-left: 1px solid rgba(255, 204, 0, 0.25);
+  }
 }
 
 
@@ -83,16 +126,29 @@
 }
 
 .post-notes-drawer {
-  grid-column: 1 / -1;
   margin-top: 0.75rem;
   border-top: 1px solid rgba(255, 204, 0, 0.25);
   padding-top: 0.75rem;
 }
 
+/* Panel masthead — the rail needs a title of its own to read as part of a blog. */
+.post-notes-title {
+  font-family: 'Cinzel', serif;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #ffcc00;
+  text-shadow: 1px 1px 0 #000;
+  margin-bottom: 10px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(255, 204, 0, 0.2);
+}
+
 .post-notes-tabs {
   display: flex;
   gap: 4px;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.75rem;
 }
 
 .post-notes-tabs button {
