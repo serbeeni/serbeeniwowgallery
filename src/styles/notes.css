@@ -1,0 +1,174 @@
+/* Grid tiles are pure thumbnails — the drawer belongs to the stream view only. */
+#contentContainer.grid-view .post-notes {
+  display: none !important;
+}
+
+.post-notes {
+  margin-top: 1rem;
+}
+
+/* The toggle sits in the post's bottom-right corner. */
+.post-notes-bar {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.notes-toggle-btn {
+  background: rgba(14, 15, 18, 0.7);
+  border: 1px solid rgba(255, 204, 0, 0.45);
+  border-radius: 3px;
+  color: #ffcc00;
+  font-family: 'Cinzel', serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-shadow: 1px 1px 0 #000;
+  padding: 6px 12px;
+  transition:
+    color 0.15s ease,
+    border-color 0.15s ease,
+    text-shadow 0.15s ease;
+}
+
+.notes-toggle-btn:hover {
+  color: #ffffff;
+  border-color: #ffcc00;
+  text-shadow: 0 0 8px rgba(255, 209, 0, 0.8);
+}
+
+.post-notes-drawer {
+  margin-top: 0.75rem;
+  border-top: 1px solid rgba(255, 204, 0, 0.25);
+  padding-top: 0.75rem;
+}
+
+.post-notes-tabs {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 0.5rem;
+}
+
+.post-notes-tabs button {
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  color: #d8c39d;
+  font-family: 'Cinzel', serif;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  transition:
+    color 0.15s ease,
+    border-color 0.15s ease;
+}
+
+.post-notes-tabs button:hover {
+  color: #ffffff;
+  text-shadow: 0 0 8px rgba(255, 209, 0, 0.8);
+}
+
+.post-notes-tabs button.is-active {
+  color: #ffcc00;
+  border-bottom-color: #ffcc00;
+}
+
+.post-notes-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  max-height: 320px;
+  overflow-y: auto;
+}
+
+.post-note {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 7px 4px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.post-note:last-child {
+  border-bottom: none;
+}
+
+/* Replies are the ones worth reading — lift them out of the like/reblog noise. */
+.post-note.is-reply {
+  background: rgba(255, 204, 0, 0.05);
+  border-left: 2px solid rgba(255, 204, 0, 0.5);
+  padding-left: 8px;
+}
+
+.post-note-avatar {
+  width: 24px;
+  height: 24px;
+  border-radius: 3px;
+  border: 1px solid rgba(255, 204, 0, 0.3);
+  flex-shrink: 0;
+  object-fit: cover;
+  margin: 0 !important;
+}
+
+.post-note-content {
+  min-width: 0;
+}
+
+.post-note-head {
+  font-family: 'Cinzel', serif;
+  font-size: 11px;
+  letter-spacing: 0.05em;
+  color: #ffcc00;
+}
+
+.post-note-head a {
+  color: #ffcc00 !important;
+  text-decoration: none !important;
+  border-bottom: none !important;
+}
+
+.post-note-head a:hover {
+  color: #ffffff !important;
+  text-shadow: 0 0 8px rgba(255, 209, 0, 0.8);
+}
+
+.post-note-action {
+  color: var(--text-muted);
+  font-family: 'Inter', sans-serif;
+  font-size: 10px;
+  letter-spacing: 0;
+  text-transform: lowercase;
+}
+
+.post-note-body {
+  color: #ffffff;
+  font-family: 'Arial Narrow', Arial, sans-serif;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  margin-top: 2px;
+  word-break: break-word;
+}
+
+.post-note-body a {
+  color: #ffcc00 !important;
+}
+
+.post-notes-message {
+  color: var(--text-muted);
+  font-family: 'Cinzel', serif;
+  font-size: 11px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  padding: 10px 4px;
+}
+
+.post-notes-message a,
+.notes-link-btn {
+  color: #ffcc00 !important;
+  background: none;
+  border: none;
+  font: inherit;
+  text-decoration: underline;
+  padding: 0;
+}

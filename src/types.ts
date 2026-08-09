@@ -15,6 +15,25 @@ export interface TumblrPost {
   thumbnailSrc: string | null
   /** Parsed out of the post text — drives the Filter menu. */
   location: string | null
+  /** `{Permalink}` — the comment drawer fetches this to read the post's notes. */
+  permalink: string | null
+  /** `{NoteCount}` as rendered on the index page. */
+  noteCount: number
+}
+
+export type NoteKind = 'reply' | 'like' | 'reblog' | 'posted' | 'other'
+
+/** One entry from a post's notes list. */
+export interface Note {
+  id: string
+  kind: NoteKind
+  blogName: string
+  blogUrl: string | null
+  avatarUrl: string | null
+  /** e.g. "liked this" or "reblogged this from someone". */
+  action: string
+  /** Sanitised reply text, for `reply` notes. */
+  bodyHtml: string | null
 }
 
 /** `{Title}`, `{Description}` and `{block:Pages}` handed over by the theme. */

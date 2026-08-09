@@ -1,4 +1,5 @@
 import type { TumblrPost, ViewMode } from '../types'
+import { PostNotes } from './PostNotes'
 
 interface PostArticleProps {
   post: TumblrPost
@@ -57,6 +58,8 @@ export function PostArticle({
           )
         )}
       </div>
+
+      <PostNotes post={post} />
     </article>
   )
 }

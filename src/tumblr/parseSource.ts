@@ -28,6 +28,8 @@ function parsePost(el: Element): TumblrPost | null {
     photoUrl,
     thumbnailSrc: photoUrl ?? inlineImg,
     location: extractLocation(el.textContent ?? ''),
+    permalink: el.getAttribute('data-permalink') || null,
+    noteCount: Number.parseInt(el.getAttribute('data-note-count') ?? '', 10) || 0,
   }
 }
 

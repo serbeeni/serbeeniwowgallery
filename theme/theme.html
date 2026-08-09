@@ -24,7 +24,7 @@
 
     <!-- Safety net: keep the raw Tumblr markup hidden even if the stylesheet fails to load. -->
     <style>
-        #tumblr-source, #tumblr-config, #nextPageLink { display: none !important; }
+        #tumblr-source, #tumblr-config, #tumblr-notes, #nextPageLink { display: none !important; }
         body { background: #0e0f12; }
     </style>
 </head>
@@ -45,10 +45,17 @@
 
 <div id="tumblr-source">
     {block:Posts}
-        {block:Text}<article class="tumblr-post" data-post-id="{PostID}" data-post-type="text"><div class="tumblr-post-body">{Body}</div></article>{/block:Text}
-        {block:Photo}<article class="tumblr-post" data-post-id="{PostID}" data-post-type="photo" data-photo-url="{PhotoURL-HighRes}">{block:Caption}<div class="tumblr-post-caption">{Caption}</div>{/block:Caption}</article>{/block:Photo}
+        {block:Text}<article class="tumblr-post" data-post-id="{PostID}" data-post-type="text" data-permalink="{Permalink}" data-note-count="{NoteCount}"><div class="tumblr-post-body">{Body}</div></article>{/block:Text}
+        {block:Photo}<article class="tumblr-post" data-post-id="{PostID}" data-post-type="photo" data-photo-url="{PhotoURL-HighRes}" data-permalink="{Permalink}" data-note-count="{NoteCount}">{block:Caption}<div class="tumblr-post-caption">{Caption}</div>{/block:Caption}</article>{/block:Photo}
     {/block:Posts}
 </div>
+
+<!--
+  Notes only render on a permalink page. The comment drawer fetches a post's {Permalink}
+  and reads this container out of the response, so it must stay in the theme even though
+  nothing on the index page uses it.
+-->
+{block:PermalinkPage}{block:PostNotes}<div id="tumblr-notes">{PostNotes}</div>{/block:PostNotes}{/block:PermalinkPage}
 
 {block:Pagination}{block:NextPage}<a id="nextPageLink" href="{NextPage}">Next</a>{/block:NextPage}{/block:Pagination}
 

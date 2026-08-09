@@ -20,6 +20,24 @@ sa nje. Zato infinite scroll i "Load All" i dalje vuku prave Tumblr stranice.
 Bundle koristi `preact/compat` (alias u `vite.config.ts`) — izvorni kod je običan React + TS,
 ali runtime je ~15KB umesto ~190KB, što je bitno jer se učitava na svakom page view-u.
 
+## Komentari (notes)
+
+Svaki post ima u donjem desnom uglu dugme sa brojem notes-a; klik otvara fioku pune širine
+ispod sadržaja posta, sa tabovima **All** i **Replies**.
+
+Tumblr u temi daje notes samo na permalink stranici (`{block:PermalinkPage}{block:PostNotes}`),
+pa fioka pri prvom otvaranju fetch-uje `{Permalink}` tog posta i pročita `#tumblr-notes` iz
+odgovora — isti pristup koji već koristi paginacija. Rezultat se kešira po post id-u, tako da
+se svaki post povlači najviše jednom po učitavanju stranice.
+
+Dva ograničenja koja dolaze od Tumblr-a:
+
+- **Samo prva strana notes-a.** Ostatak stoji iza Tumblr-ovog "Show more notes" endpointa.
+  Kad ih ima više, fioka to eksplicitno napiše i ponudi link na permalink.
+- **Tekst odgovora se sanitizuje.** Dolazi sa tuđih blogova, pa prolazi kroz allowlist
+  (`src/utils/sanitize.ts`): preživljavaju samo bezbedni inline tagovi, svi atributi osim
+  `href` se brišu.
+
 ## Razvoj
 
 ```bash
@@ -30,7 +48,8 @@ npm run build      # → dist/theme.js + dist/theme.css
 ```
 
 `index.html` je isključivo dev harness i ne ulazi u build; sadrži isti `#tumblr-source`
-format koji `theme/theme.html` generiše, pa `npm run dev` koristi pravi parser.
+format koji `theme/theme.html` generiše, pa `npm run dev` koristi pravi parser. `dev/notes.html`
+glumi permalink stranicu sa notes-ima, da bi fioka sa komentarima radila lokalno.
 
 ## Deploy
 
