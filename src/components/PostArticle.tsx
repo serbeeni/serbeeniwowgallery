@@ -7,6 +7,8 @@ interface PostArticleProps {
   /** Grid view only: jump back to the stream and scroll to this post. */
   onSelect: (domId: string) => void
   onImageClick: (src: string) => void
+  notesOpen: boolean
+  onToggleNotes: () => void
 }
 
 export function PostArticle({
@@ -14,6 +16,8 @@ export function PostArticle({
   viewMode,
   onSelect,
   onImageClick,
+  notesOpen,
+  onToggleNotes,
 }: PostArticleProps) {
   const domId = `post-${post.id}`
   const photoUrl = post.type === 'photo' ? post.photoUrl : null
@@ -59,7 +63,7 @@ export function PostArticle({
         )}
       </div>
 
-      <PostNotes post={post} />
+      <PostNotes post={post} open={notesOpen} onToggle={onToggleNotes} />
     </article>
   )
 }

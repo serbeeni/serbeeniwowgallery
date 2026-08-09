@@ -37,6 +37,17 @@ napiše isključivo ulogovan Tumblr korisnik iz Tumblr-ovog interfejsa. Comments
 App ID stoji u `src/config/cusdis.ts`. Moderacija ide preko Cusdis dashboard-a — novi komentari
 čekaju odobrenje, pa uključi obaveštenja da ti ne stoje neprimećeni.
 
+Cusdis se renderuje u iframe-u napravljenom preko `srcdoc`, koji po specifikaciji nasleđuje
+origin roditelja — zato `src/cusdis/` ume da uđe unutra i da:
+
+- ubaci zlatni stylesheet (`iframeStyle.ts`) preko Cusdis-ovih Tailwind klasa
+- ukloni polje za email
+- premesti formu ispod postojećih komentara
+
+Strukturne izmene se ponavljaju kroz `MutationObserver`, jer je Cusdis Svelte aplikacija koja
+se sama prerenderuje. Widget koristi **jedan iframe za sve niti**, pa je otvorena najviše jedna
+fioka — otvaranje druge zatvara prethodnu.
+
 Dva ograničenja koja dolaze od Tumblr-a:
 
 - **Samo prva strana notes-a.** Ostatak stoji iza Tumblr-ovog "Show more notes" endpointa.

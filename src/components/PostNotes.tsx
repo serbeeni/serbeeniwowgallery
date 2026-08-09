@@ -8,14 +8,16 @@ type Tab = 'all' | 'replies' | 'comments'
 
 interface PostNotesProps {
   post: TumblrPost
+  /** Only one drawer is open at a time — Cusdis reuses a single iframe for every thread. */
+  open: boolean
+  onToggle: () => void
 }
 
 /**
  * A drawer under the post body holding that post's notes. The toggle sits in the post's
  * bottom-right corner; notes are only fetched once the drawer is first opened.
  */
-export function PostNotes({ post }: PostNotesProps) {
-  const [open, setOpen] = useState(false)
+export function PostNotes({ post, open, onToggle }: PostNotesProps) {
   const [tab, setTab] = useState<Tab>('all')
   // A post Tumblr reports as having no notes has nothing to fetch — skip the request.
   const isEmpty = post.noteCount === 0
@@ -42,7 +44,7 @@ export function PostNotes({ post }: PostNotesProps) {
           className={`notes-toggle-btn${open ? ' is-open' : ''}`}
           onClick={(e) => {
             e.stopPropagation()
-            setOpen((value) => !value)
+            onToggle()
           }}
           aria-expanded={open}
           aria-label={label}
