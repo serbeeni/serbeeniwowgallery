@@ -93,8 +93,13 @@ Od tog trenutka **push na `main` je deploy** — nema tagova ni ponovnog lepljen
 Tumblr. Zauzvrat, pokvaren build ide u produkciju istog trena, pa `npm run build` pre push-a
 prestaje da bude opcion.
 
-Keš je namerno postavljen na `must-revalidate`: imena fajlova se ne menjaju, pa bi dugačak
-keš značio da izmena visi nevidljiva.
+Dva zaglavlja u `vercel.json`, pošto JSON nema komentare pa objašnjenje stoji ovde:
+
+- `Cache-Control: max-age=0, must-revalidate` — imena fajlova se nikad ne menjaju, pa bi
+  dugačak keš značio da izmena visi nevidljiva dok ne istekne. Fajlovi su ~50KB, a 304
+  odgovori su jeftini.
+- `Access-Control-Allow-Origin: *` — nije potrebno za `<script src>` ni za `<link>`, ali
+  čini sourcemap dohvatljivim sa Tumblr domena kad se nešto debug-uje.
 
 ## Deploy preko githack-a (trenutno u upotrebi)
 
