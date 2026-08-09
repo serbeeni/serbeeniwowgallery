@@ -22,6 +22,17 @@ html, body {
   margin: 0 !important;
   padding: 0 !important;
   height: auto !important;
+}
+
+/*
+ * The iframe's height is driven from the parent (see enhance.ts), so the frame is always
+ * tall enough for its content and must never grow a scrollbar of its own — the rail scrolls.
+ */
+html {
+  overflow: hidden !important;
+}
+
+body {
   overflow: visible !important;
 }
 

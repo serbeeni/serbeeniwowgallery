@@ -45,7 +45,20 @@ function injectStyle(doc: Document) {
  * is a singleton it reuses for every thread, and each render fires `load` again.
  */
 export function enhanceCusdisIframe(iframe: HTMLIFrameElement): () => void {
-  let observer: MutationObserver | null = null
+  let mutations: MutationObserver | null = null
+  let resizes: ResizeObserver | null = null
+
+  /**
+   * Cusdis sizes the iframe from a height it measures and posts once. Removing the email
+   * field and moving the composer changes that height afterwards, leaving the frame too
+   * short and scrolling internally — so the height is taken over here instead.
+   */
+  const syncHeight = (doc: Document) => {
+    const height = Math.ceil(doc.documentElement.scrollHeight)
+    if (height > 0 && iframe.style.height !== `${height}px`) {
+      iframe.style.height = `${height}px`
+    }
+  }
 
   const enhance = () => {
     // srcdoc iframes are same-origin, but a thrown SecurityError should not break the page.
@@ -55,14 +68,25 @@ export function enhanceCusdisIframe(iframe: HTMLIFrameElement): () => void {
     } catch {
       return
     }
-    if (!doc) return
+    if (!doc?.body) return
+    const target = doc
 
-    injectStyle(doc)
-    applyStructure(doc)
+    injectStyle(target)
+    applyStructure(target)
+    syncHeight(target)
 
-    observer?.disconnect()
-    observer = new MutationObserver(() => applyStructure(doc))
-    observer.observe(doc.body, { childList: true, subtree: true })
+    mutations?.disconnect()
+    mutations = new MutationObserver(() => {
+      applyStructure(target)
+      syncHeight(target)
+    })
+    mutations.observe(target.body, { childList: true, subtree: true })
+
+    // Catches reflow the mutation observer cannot see — a textarea dragged taller, a font
+    // finishing loading, the rail changing width.
+    resizes?.disconnect()
+    resizes = new ResizeObserver(() => syncHeight(target))
+    resizes.observe(target.documentElement)
   }
 
   iframe.addEventListener('load', enhance)
@@ -71,6 +95,7 @@ export function enhanceCusdisIframe(iframe: HTMLIFrameElement): () => void {
 
   return () => {
     iframe.removeEventListener('load', enhance)
-    observer?.disconnect()
+    mutations?.disconnect()
+    resizes?.disconnect()
   }
 }
