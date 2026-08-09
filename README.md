@@ -34,8 +34,8 @@ Treći tab, **Comments**, je nešto drugo: Tumblr notes su samo za čitanje jer 
 napiše isključivo ulogovan Tumblr korisnik iz Tumblr-ovog interfejsa. Comments tab ugrađuje
 [Cusdis](https://cusdis.com) — posetiocu ne treba nalog, upiše ime i komentar.
 
-> **Treba popuniti App ID.** Napravi nalog na cusdis.com, dodaj sajt i prekopiraj App ID u
-> `src/config/cusdis.ts`. Dok je prazan, tab prikazuje uputstvo umesto niti.
+App ID stoji u `src/config/cusdis.ts`. Moderacija ide preko Cusdis dashboard-a — novi komentari
+čekaju odobrenje, pa uključi obaveštenja da ti ne stoje neprimećeni.
 
 Dva ograničenja koja dolaze od Tumblr-a:
 
