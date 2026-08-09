@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { CUSDIS_APP_ID, CUSDIS_SCRIPT } from '../config/cusdis'
+import { enhanceCusdisIframe } from '../cusdis/enhance'
 
 declare global {
   interface Window {
@@ -54,12 +55,17 @@ export function useCusdis(enabled: boolean) {
     if (!enabled || !CUSDIS_APP_ID) return
 
     let cancelled = false
+    let teardown: (() => void) | undefined
     setStatus('loading')
 
     loadCusdis()
       .then(() => {
         if (cancelled || !ref.current) return
         window.CUSDIS?.renderTo(ref.current)
+
+        const iframe = ref.current.querySelector('iframe')
+        if (iframe) teardown = enhanceCusdisIframe(iframe)
+
         setStatus('ready')
       })
       .catch((err) => {
@@ -69,6 +75,7 @@ export function useCusdis(enabled: boolean) {
 
     return () => {
       cancelled = true
+      teardown?.()
     }
   }, [enabled])
 

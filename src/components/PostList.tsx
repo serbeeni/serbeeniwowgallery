@@ -6,6 +6,9 @@ interface PostListProps {
   viewMode: ViewMode
   onSelect: (domId: string) => void
   onImageClick: (src: string) => void
+  /** Post id whose notes drawer is open, if any. */
+  openNotesId: string | null
+  onToggleNotes: (postId: string) => void
 }
 
 export function PostList({
@@ -13,6 +16,8 @@ export function PostList({
   viewMode,
   onSelect,
   onImageClick,
+  openNotesId,
+  onToggleNotes,
 }: PostListProps) {
   return (
     <main id="contentContainer" className={`${viewMode}-view`}>
@@ -23,6 +28,8 @@ export function PostList({
           viewMode={viewMode}
           onSelect={onSelect}
           onImageClick={onImageClick}
+          notesOpen={openNotesId === post.id}
+          onToggleNotes={() => onToggleNotes(post.id)}
         />
       ))}
     </main>

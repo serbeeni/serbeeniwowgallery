@@ -87,12 +87,11 @@
   border-bottom-color: #ffcc00;
 }
 
+/* The drawer grows to fit its contents rather than scrolling inside itself. */
 .post-notes-list {
   list-style: none;
   margin: 0;
   padding: 0;
-  max-height: 320px;
-  overflow-y: auto;
 }
 
 .post-note {
@@ -172,10 +171,13 @@
   padding-top: 4px;
 }
 
+/* Cusdis reports its own height over postMessage, so never cap it here. */
 .cusdis-wrapper iframe {
   width: 100%;
+  max-height: none;
   border: none;
   color-scheme: dark;
+  display: block;
 }
 
 .post-notes-message code {
