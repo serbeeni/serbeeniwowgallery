@@ -2,27 +2,25 @@ import { CUSDIS_IFRAME_CSS } from './iframeStyle'
 
 const STYLE_ID = 'serbeeni-cusdis-style'
 
-export const STACK_CLASS = 'sb-stack'
-export const COMPOSER_CLASS = 'sb-composer'
-
 /**
- * Marks the composer so CSS can order it below the comments.
- *
- * This only ever adds classes. An earlier version moved the node with appendChild, which
- * Svelte undid on every keystroke — and re-inserting an element blurs it, so the reply box
- * lost focus as you typed. Class marks are idempotent, survive re-renders, and cannot feed
- * the mutation observer that triggered them.
+ * Cusdis is a Svelte app that re-renders on its own, so the structural edits below are
+ * reapplied whenever its tree changes rather than done once.
  */
 function applyStructure(doc: Document) {
-  const container = doc.getElementById('root')?.firstElementChild
-  const textarea = doc.querySelector('textarea')
-  if (!container || !textarea) return
-
-  if (!container.classList.contains(STACK_CLASS)) {
-    container.classList.add(STACK_CLASS)
+  // The email field is optional and unwanted; drop the whole labelled block.
+  const email = doc.querySelector('input[name="email"]')
+  if (email) {
+    const block = email.closest('.px-1') ?? email.parentElement
+    block?.remove()
   }
 
-  // Walk up to the composer's own block — the child of the container that holds the textarea.
+  // Put the composer below the comments. Anchoring on Cusdis's own app container rather than
+  // on whatever happens to wrap the textarea keeps this from depending on its class names,
+  // which are Tailwind utilities and change freely between releases.
+  const textarea = doc.querySelector('textarea')
+  const container = doc.getElementById('root')?.firstElementChild
+  if (!textarea || !container) return
+
   let block: HTMLElement = textarea
   while (
     block.parentElement &&
@@ -32,11 +30,8 @@ function applyStructure(doc: Document) {
     block = block.parentElement
   }
 
-  if (
-    block.parentElement === container &&
-    !block.classList.contains(COMPOSER_CLASS)
-  ) {
-    block.classList.add(COMPOSER_CLASS)
+  if (block.parentElement === container && container.lastElementChild !== block) {
+    container.appendChild(block)
   }
 }
 
@@ -61,14 +56,9 @@ export function enhanceCusdisIframe(iframe: HTMLIFrameElement): () => void {
    * field and moving the composer changes that height afterwards, leaving the frame too
    * short and scrolling internally — so the height is taken over here instead.
    */
-  let lastHeight = 0
-
   const syncHeight = (doc: Document) => {
     const height = Math.ceil(doc.documentElement.scrollHeight)
-    // A one-pixel tolerance stops the resize observer and this setter from chasing each
-    // other: writing the height resizes the frame, which fires the observer again.
-    if (height > 0 && Math.abs(height - lastHeight) > 1) {
-      lastHeight = height
+    if (height > 0 && iframe.style.height !== `${height}px`) {
       iframe.style.height = `${height}px`
     }
   }
@@ -96,11 +86,10 @@ export function enhanceCusdisIframe(iframe: HTMLIFrameElement): () => void {
     mutations.observe(target.body, { childList: true, subtree: true })
 
     // Catches reflow the mutation observer cannot see — a textarea dragged taller, a font
-    // finishing loading, the rail changing width. Observing body rather than the root
-    // element keeps it clear of the height we write onto the frame itself.
+    // finishing loading, the rail changing width.
     resizes?.disconnect()
     resizes = new ResizeObserver(() => syncHeight(target))
-    resizes.observe(target.body)
+    resizes.observe(target.documentElement)
   }
 
   iframe.addEventListener('load', enhance)
