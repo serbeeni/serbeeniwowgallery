@@ -68,15 +68,6 @@
   #contentContainer.stream-view article.post.notes-open .post-notes-drawer {
     align-self: stretch;
     height: 100%;
-    /*
-     * min-height:0 keeps the rail from contributing its own height to the row, and
-     * max-height:100% keeps it from outgrowing it. Together they pin the card's height to
-     * the picture no matter how many comments arrive.
-     */
-    min-height: 0;
-    max-height: 100%;
-    display: flex;
-    flex-direction: column;
 
     margin-top: 0;
     padding: 2px 4px 2px 22px;
@@ -87,42 +78,6 @@
       rgba(255, 204, 0, 0.05),
       rgba(255, 204, 0, 0) 55%
     );
-  }
-
-  /* Only the rail scrolls; stacked under the post it grows freely, as before. */
-  #contentContainer.stream-view article.post.notes-open .post-notes-body {
-    flex: 1;
-    min-height: 0;
-    overflow-y: auto;
-    padding-right: 10px;
-    scrollbar-width: thin;
-    scrollbar-color: rgba(255, 204, 0, 0.45) rgba(0, 0, 0, 0.3);
-  }
-
-  #contentContainer.stream-view
-    article.post.notes-open
-    .post-notes-body::-webkit-scrollbar {
-    width: 6px;
-  }
-
-  #contentContainer.stream-view
-    article.post.notes-open
-    .post-notes-body::-webkit-scrollbar-track {
-    background: rgba(0, 0, 0, 0.3);
-    border-radius: 3px;
-  }
-
-  #contentContainer.stream-view
-    article.post.notes-open
-    .post-notes-body::-webkit-scrollbar-thumb {
-    background: rgba(255, 204, 0, 0.45);
-    border-radius: 3px;
-  }
-
-  #contentContainer.stream-view
-    article.post.notes-open
-    .post-notes-body::-webkit-scrollbar-thumb:hover {
-    background: rgba(255, 204, 0, 0.7);
   }
 }
 
@@ -177,10 +132,52 @@
   box-shadow: 0 0 8px rgba(255, 204, 0, 0.25);
 }
 
+/*
+ * Hard cap on the comments panel — change this one value to resize it.
+ *
+ * A percentage cap cannot work here: it would resolve against a grid row whose own height
+ * comes from its contents, so it constrains nothing. min-height:0 keeps the panel from
+ * pushing the row taller; the pixel cap keeps it from running past the picture.
+ */
 .post-notes-drawer {
+  --rail-max-height: 700px;
+
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  max-height: var(--rail-max-height);
+
   margin-top: 0.75rem;
   border-top: 1px solid rgba(255, 204, 0, 0.25);
   padding-top: 0.75rem;
+}
+
+/* Title and tabs hold still; everything under them scrolls. */
+.post-notes-body {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding-right: 10px;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 204, 0, 0.45) rgba(0, 0, 0, 0.3);
+}
+
+.post-notes-body::-webkit-scrollbar {
+  width: 6px;
+}
+
+.post-notes-body::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 3px;
+}
+
+.post-notes-body::-webkit-scrollbar-thumb {
+  background: rgba(255, 204, 0, 0.45);
+  border-radius: 3px;
+}
+
+.post-notes-body::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 204, 0, 0.7);
 }
 
 /* Panel masthead — the rail needs a title of its own to read as part of a blog. */
