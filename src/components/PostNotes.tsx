@@ -16,10 +16,12 @@ interface PostNotesProps {
 export function PostNotes({ post }: PostNotesProps) {
   const [open, setOpen] = useState(false)
   const [tab, setTab] = useState<Tab>('all')
+  // A post Tumblr reports as having no notes has nothing to fetch — skip the request.
+  const isEmpty = post.noteCount === 0
   const { notes, hasMore, status, reload } = useNotes(
     post.id,
     post.permalink,
-    open,
+    open && !isEmpty,
   )
 
   const shown = useMemo(
@@ -27,7 +29,7 @@ export function PostNotes({ post }: PostNotesProps) {
     [notes, tab],
   )
 
-  if (post.noteCount === 0 || !post.permalink) return null
+  if (!post.permalink) return null
 
   const label = post.noteCount === 1 ? '1 note' : `${post.noteCount} notes`
 
@@ -65,6 +67,8 @@ export function PostNotes({ post }: PostNotesProps) {
               Replies
             </button>
           </div>
+
+          {isEmpty && <div className="post-notes-message">No notes yet.</div>}
 
           {status === 'loading' && (
             <div className="post-notes-message">Loading notes...</div>
