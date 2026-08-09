@@ -53,7 +53,12 @@ glumi permalink stranicu sa notes-ima, da bi fioka sa komentarima radila lokalno
 
 ## Deploy
 
-Bundle se servira sa jsDelivr-a direktno iz ovog repozitorijuma.
+Bundle se servira preko [githack](https://raw.githack.com/) direktno iz ovog repozitorijuma.
+`raw.githubusercontent.com` ne dolazi u obzir — šalje `text/plain` uz
+`X-Content-Type-Options: nosniff`, pa browser odbija da izvrši skriptu. `rawcdn.githack.com`
+je varijanta koja keširа trajno i namenjena je produkciji.
+
+Repo mora da bude **javan** — svaki CDN koji proksira GitHub čita anonimno.
 
 1. `npm run build`
 2. Commituj `dist/` i pushuj
@@ -62,11 +67,10 @@ Bundle se servira sa jsDelivr-a direktno iz ovog repozitorijuma.
    Tumblr → Edit Theme → Edit HTML
 
 Kasnije promene: build → commit `dist/` → **novi tag** → izmeni verziju u obe URL-e u temi.
-jsDelivr keš je vezan za tag, pa bez bump-a verzije stari bundle ostaje na sajtu.
+Keš je vezan za tag, pa bez bump-a verzije stari bundle ostaje na sajtu.
 
-Za brzo testiranje bez novog taga možeš privremeno koristiti `@main` i pozvati
-`https://purge.jsdelivr.net/gh/serbeeni/serbeeniwowgallery@main/dist/theme.js` da očistiš keš.
-Za produkciju koristi tagove — `@main` se menja pod nogama.
+Za brzo testiranje bez novog taga koristi `raw.githack.com` (ista putanja, kratak keš) umesto
+`rawcdn.githack.com`. Za produkciju uvek tag — grana se menja pod nogama.
 
 ## Struktura
 
