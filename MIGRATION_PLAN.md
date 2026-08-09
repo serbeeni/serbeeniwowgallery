@@ -104,30 +104,6 @@ CSS je **globalni** (ne CSS Modules) jer selektori zavise od ID-jeva i kaskade
 (`#contentContainer.grid-view article.post`) — modules bi tražili preimenovanje i rizikovali
 vizuelne razlike.
 
-## Dodatak: fioka sa komentarima (nova funkcionalnost)
-
-Ovo nije port — traženo je posle migracije i ide na istoj grani, u zasebnom commit-u.
-
-Dugme sa brojem notes-a stoji u donjem desnom uglu svakog posta (stream view; u grid view-u
-je sakriveno). Klik otvara fioku pune širine ispod sadržaja posta, sa tabovima All / Replies.
-
-Podaci: Tumblr `{PostNotes}` postoji samo unutar `{block:PermalinkPage}`, pa `theme.html`
-emituje `#tumblr-notes` na permalink stranici, a fioka pri prvom otvaranju fetch-uje
-`{Permalink}` posta i pročita taj kontejner (`src/tumblr/fetchNotes.ts`). Keš po post id-u je
-u `useNotes`, deljen između svih instanci, sa dedupe-om paralelnih zahteva.
-
-Odluke:
-
-- **Notes markup se parsira defanzivno.** Tumblr nikad nije garantovao strukturu notes-a;
-  svako polje ima fallback, pa note koji da samo ime bloga i dalje ume da se prikaže.
-- **Tekst odgovora se sanitizuje** (`src/utils/sanitize.ts`) — dolazi sa tuđih blogova, a
-  ubacuje se preko `dangerouslySetInnerHTML`. Allowlist tagova, svi atributi osim `href`
-  padaju, `href` mora biti http/https/mailto.
-- **Prva strana notes-a je sve što permalink daje.** Umesto tihog odsecanja, fioka napiše
-  koliko je prikazano i linkuje permalink.
-- **Replies su vizuelno izdvojeni** iz mase lajkova i reblogova, jer je to jedini sadržaj
-  koji se zaista čita.
-
 ## Koraci
 
 1. Vite + React 19 + TS scaffold, lib build, preact alias

@@ -20,46 +20,6 @@ sa nje. Zato infinite scroll i "Load All" i dalje vuku prave Tumblr stranice.
 Bundle koristi `preact/compat` (alias u `vite.config.ts`) — izvorni kod je običan React + TS,
 ali runtime je ~15KB umesto ~190KB, što je bitno jer se učitava na svakom page view-u.
 
-## Komentari (notes)
-
-Svaki post ima u donjem desnom uglu ikonicu; klik otvara panel sa komentarima, sa tabovima
-**All**, **Replies** i **Comments**.
-
-Na širokim ekranima (≥1200px) otvoreni post se proširi izvan kolone od 900px i panel stane
-desno od sadržaja — slika ostaje iste veličine kao pre otvaranja. Ispod te širine panel pada
-pod post, preko cele širine.
-
-Tumblr u temi daje notes samo na permalink stranici (`{block:PermalinkPage}{block:PostNotes}`),
-pa fioka pri prvom otvaranju fetch-uje `{Permalink}` tog posta i pročita `#tumblr-notes` iz
-odgovora — isti pristup koji već koristi paginacija. Rezultat se kešira po post id-u, tako da
-se svaki post povlači najviše jednom po učitavanju stranice.
-
-Treći tab, **Comments**, je nešto drugo: Tumblr notes su samo za čitanje jer reply može da
-napiše isključivo ulogovan Tumblr korisnik iz Tumblr-ovog interfejsa. Comments tab ugrađuje
-[Cusdis](https://cusdis.com) — posetiocu ne treba nalog, upiše ime i komentar.
-
-App ID stoji u `src/config/cusdis.ts`. Moderacija ide preko Cusdis dashboard-a — novi komentari
-čekaju odobrenje, pa uključi obaveštenja da ti ne stoje neprimećeni.
-
-Cusdis se renderuje u iframe-u napravljenom preko `srcdoc`, koji po specifikaciji nasleđuje
-origin roditelja — zato `src/cusdis/` ume da uđe unutra i da:
-
-- ubaci zlatni stylesheet (`iframeStyle.ts`) preko Cusdis-ovih Tailwind klasa
-- ukloni polje za email
-- premesti formu ispod postojećih komentara
-
-Strukturne izmene se ponavljaju kroz `MutationObserver`, jer je Cusdis Svelte aplikacija koja
-se sama prerenderuje. Widget koristi **jedan iframe za sve niti**, pa je otvorena najviše jedna
-fioka — otvaranje druge zatvara prethodnu.
-
-Dva ograničenja koja dolaze od Tumblr-a:
-
-- **Samo prva strana notes-a.** Ostatak stoji iza Tumblr-ovog "Show more notes" endpointa.
-  Kad ih ima više, fioka to eksplicitno napiše i ponudi link na permalink.
-- **Tekst odgovora se sanitizuje.** Dolazi sa tuđih blogova, pa prolazi kroz allowlist
-  (`src/utils/sanitize.ts`): preživljavaju samo bezbedni inline tagovi, svi atributi osim
-  `href` se brišu.
-
 ## Razvoj
 
 ```bash
@@ -70,46 +30,28 @@ npm run build      # → dist/theme.js + dist/theme.css
 ```
 
 `index.html` je isključivo dev harness i ne ulazi u build; sadrži isti `#tumblr-source`
-format koji `theme/theme.html` generiše, pa `npm run dev` koristi pravi parser. `dev/notes.html`
-glumi permalink stranicu sa notes-ima, da bi fioka sa komentarima radila lokalno.
+format koji `theme/theme.html` generiše, pa `npm run dev` koristi pravi parser.
 
 ## Deploy
 
-Bundle gradi i servira Vercel iz `main` grane:
+Bundle se servira preko [githack](https://raw.githack.com/) direktno iz ovog repozitorijuma.
 
-```
-https://serbeeniwowgallery.vercel.app/theme.css
-https://serbeeniwowgallery.vercel.app/theme.js
-```
+Repo mora da bude **javan** — svaki CDN koji proksira GitHub čita anonimno. jsDelivr ne
+dolazi u obzir: keširao je neuspeh iz perioda dok je repo bio privatan i vraća ga i dalje.
+`raw.githubusercontent.com` takođe ne — šalje `text/plain` uz `X-Content-Type-Options:
+nosniff`, pa browser odbija da izvrši skriptu.
 
-**Push na `main` je deploy.** Tema se u Tumblr lepi samo kad se menja sam `theme/theme.html`
-— za izmenu koda ne treba ništa raditi u Tumblr-u.
+1. `npm run build`
+2. Commituj `dist/` i pushuj
+3. Napravi git tag i GitHub release, npr. `v3.6.0`
+4. U `theme/theme.html` podesi obe URL-e na taj tag i nalepi fajl u
+   Tumblr → Edit Theme → Edit HTML
 
-Zauzvrat, pokvaren build ide u produkciju istog trena; nema više taga koji stoji između.
-Zato `npm run build` pre push-a prestaje da bude opcion.
+Kasnije promene: build → commit `dist/` → **novi tag** → izmeni verziju u obe URL-e u temi.
+Keš je vezan za tag, pa bez bump-a verzije stari bundle ostaje na sajtu.
 
-Root sajta vraća 404 i to je ispravno — `dist/` sadrži samo ta dva fajla, nema `index.html`.
-
-Dva zaglavlja u `vercel.json`, pošto JSON nema komentare pa objašnjenje stoji ovde:
-
-- `Cache-Control: max-age=0, must-revalidate` — imena fajlova se nikad ne menjaju, pa bi
-  dugačak keš značio da izmena visi nevidljiva dok ne istekne. Fajlovi su ~50KB, a 304
-  odgovori su jeftini.
-- `Access-Control-Allow-Origin: *` — nije potrebno za `<script src>` ni za `<link>`, ali
-  čini sourcemap dohvatljivim sa Tumblr domena kad se nešto debug-uje.
-
-### Rezerva: githack
-
-`dist/` se i dalje commituje, pa svaki tag ostaje dohvatljiv preko githack-a ako Vercel
-ikad otkaže:
-
-```
-https://rawcdn.githack.com/serbeeni/serbeeniwowgallery/<tag>/dist/theme.js
-```
-
-`raw.githubusercontent.com` ne dolazi u obzir — šalje `text/plain` uz
-`X-Content-Type-Options: nosniff`, pa browser odbija da izvrši skriptu. Repo mora da bude
-javan; svaki CDN koji proksira GitHub čita anonimno.
+Za brzo testiranje bez novog taga koristi `raw.githack.com` (ista putanja, kratak keš) umesto
+`rawcdn.githack.com`. Za produkciju uvek tag — grana se menja pod nogama.
 
 ## Struktura
 
