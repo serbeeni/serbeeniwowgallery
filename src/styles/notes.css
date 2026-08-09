@@ -167,6 +167,24 @@
   color: #ffcc00 !important;
 }
 
+/* Cusdis replaces the target div with an iframe that reports its own height. */
+.cusdis-wrapper {
+  padding-top: 4px;
+}
+
+.cusdis-wrapper iframe {
+  width: 100%;
+  border: none;
+  color-scheme: dark;
+}
+
+.post-notes-message code {
+  color: #ffcc00;
+  font-family: 'Consolas', 'Courier New', monospace;
+  font-size: 10px;
+  text-transform: none;
+}
+
 .post-notes-message {
   color: var(--text-muted);
   font-family: 'Cinzel', serif;

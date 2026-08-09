@@ -19,6 +19,7 @@ function parsePost(el: Element): TumblrPost | null {
   // `generateGridThumbnails` used the high-res photo when present and otherwise reached for
   // the first inline image in the body. Same order here, resolved once at parse time.
   const inlineImg = bodyEl?.querySelector('img')?.getAttribute('src') ?? null
+  const text = (el.textContent ?? '').replace(/\s+/g, ' ').trim()
 
   return {
     id,
@@ -30,6 +31,7 @@ function parsePost(el: Element): TumblrPost | null {
     location: extractLocation(el.textContent ?? ''),
     permalink: el.getAttribute('data-permalink') || null,
     noteCount: Number.parseInt(el.getAttribute('data-note-count') ?? '', 10) || 0,
+    title: text.length > 80 ? `${text.slice(0, 77)}...` : text || `Post ${id}`,
   }
 }
 

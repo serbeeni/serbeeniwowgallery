@@ -19,6 +19,8 @@ export interface TumblrPost {
   permalink: string | null
   /** `{NoteCount}` as rendered on the index page. */
   noteCount: number
+  /** Short label for the post, used as the comment thread's title. */
+  title: string
 }
 
 export type NoteKind = 'reply' | 'like' | 'reblog' | 'posted' | 'other'

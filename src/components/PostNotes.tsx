@@ -2,8 +2,9 @@ import { useMemo, useState } from 'react'
 import { NOTES_ICON_URL } from '../config/assets'
 import { useNotes } from '../hooks/useNotes'
 import type { TumblrPost } from '../types'
+import { CusdisThread } from './CusdisThread'
 
-type Tab = 'all' | 'replies'
+type Tab = 'all' | 'replies' | 'comments'
 
 interface PostNotesProps {
   post: TumblrPost
@@ -66,15 +67,28 @@ export function PostNotes({ post }: PostNotesProps) {
             >
               Replies
             </button>
+            {/* Tumblr notes are read-only; this is the tab readers can write in. */}
+            <button
+              className={tab === 'comments' ? 'is-active' : undefined}
+              onClick={() => setTab('comments')}
+            >
+              Comments
+            </button>
           </div>
 
-          {isEmpty && <div className="post-notes-message">No notes yet.</div>}
+          {tab === 'comments' && (
+            <CusdisThread post={post} active={open && tab === 'comments'} />
+          )}
 
-          {status === 'loading' && (
+          {tab !== 'comments' && isEmpty && (
+            <div className="post-notes-message">No notes yet.</div>
+          )}
+
+          {tab !== 'comments' && status === 'loading' && (
             <div className="post-notes-message">Loading notes...</div>
           )}
 
-          {status === 'error' && (
+          {tab !== 'comments' && status === 'error' && (
             <div className="post-notes-message">
               Could not load notes.{' '}
               <button className="notes-link-btn" onClick={reload}>
@@ -83,13 +97,13 @@ export function PostNotes({ post }: PostNotesProps) {
             </div>
           )}
 
-          {status === 'loaded' && shown.length === 0 && (
+          {tab !== 'comments' && status === 'loaded' && shown.length === 0 && (
             <div className="post-notes-message">
               {tab === 'replies' ? 'No replies yet.' : 'No notes yet.'}
             </div>
           )}
 
-          {shown.length > 0 && (
+          {tab !== 'comments' && shown.length > 0 && (
             <ul className="post-notes-list">
               {shown.map((note) => (
                 <li className={`post-note is-${note.kind}`} key={note.id}>
@@ -127,7 +141,7 @@ export function PostNotes({ post }: PostNotesProps) {
             Tumblr only ships the first page of notes with the permalink; saying so beats
             silently showing a truncated list.
           */}
-          {status === 'loaded' && hasMore && (
+          {tab !== 'comments' && status === 'loaded' && hasMore && (
             <div className="post-notes-message">
               Showing the first {notes.length} of {label}.{' '}
               <a href={post.permalink} target="_blank" rel="noopener noreferrer">
