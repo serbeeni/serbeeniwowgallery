@@ -73,25 +73,22 @@ npm run build      # → dist/theme.js + dist/theme.css
 format koji `theme/theme.html` generiše, pa `npm run dev` koristi pravi parser. `dev/notes.html`
 glumi permalink stranicu sa notes-ima, da bi fioka sa komentarima radila lokalno.
 
-## Deploy preko Vercel-a (preporučeno)
+## Deploy
 
-`vercel.json` je već u repou — build komanda, output folder i keš zaglavlja. Ostaje da se
-projekat poveže, što se radi jednom u browseru:
-
-1. Prijava na [vercel.com](https://vercel.com) preko GitHub naloga
-2. **Add New → Project** → import `serbeeni/serbeeniwowgallery`
-3. Podešavanja ostavi kako ih Vercel pročita iz `vercel.json` (Build `npm run build`,
-   Output `dist`); env varijable nisu potrebne
-4. Deploy, pa u `theme/theme.html` upiši dobijeni domen:
+Bundle gradi i servira Vercel iz `main` grane:
 
 ```
-https://<projekat>.vercel.app/theme.css
-https://<projekat>.vercel.app/theme.js
+https://serbeeniwowgallery.vercel.app/theme.css
+https://serbeeniwowgallery.vercel.app/theme.js
 ```
 
-Od tog trenutka **push na `main` je deploy** — nema tagova ni ponovnog lepljenja teme u
-Tumblr. Zauzvrat, pokvaren build ide u produkciju istog trena, pa `npm run build` pre push-a
-prestaje da bude opcion.
+**Push na `main` je deploy.** Tema se u Tumblr lepi samo kad se menja sam `theme/theme.html`
+— za izmenu koda ne treba ništa raditi u Tumblr-u.
+
+Zauzvrat, pokvaren build ide u produkciju istog trena; nema više taga koji stoji između.
+Zato `npm run build` pre push-a prestaje da bude opcion.
+
+Root sajta vraća 404 i to je ispravno — `dist/` sadrži samo ta dva fajla, nema `index.html`.
 
 Dva zaglavlja u `vercel.json`, pošto JSON nema komentare pa objašnjenje stoji ovde:
 
@@ -101,26 +98,18 @@ Dva zaglavlja u `vercel.json`, pošto JSON nema komentare pa objašnjenje stoji 
 - `Access-Control-Allow-Origin: *` — nije potrebno za `<script src>` ni za `<link>`, ali
   čini sourcemap dohvatljivim sa Tumblr domena kad se nešto debug-uje.
 
-## Deploy preko githack-a (trenutno u upotrebi)
+### Rezerva: githack
 
-Bundle se servira preko [githack](https://raw.githack.com/) direktno iz ovog repozitorijuma.
+`dist/` se i dalje commituje, pa svaki tag ostaje dohvatljiv preko githack-a ako Vercel
+ikad otkaže:
+
+```
+https://rawcdn.githack.com/serbeeni/serbeeniwowgallery/<tag>/dist/theme.js
+```
+
 `raw.githubusercontent.com` ne dolazi u obzir — šalje `text/plain` uz
-`X-Content-Type-Options: nosniff`, pa browser odbija da izvrši skriptu. `rawcdn.githack.com`
-je varijanta koja keširа trajno i namenjena je produkciji.
-
-Repo mora da bude **javan** — svaki CDN koji proksira GitHub čita anonimno.
-
-1. `npm run build`
-2. Commituj `dist/` i pushuj
-3. Napravi git tag i GitHub release, npr. `v3.3.0`
-4. U `theme/theme.html` podesi obe URL-e na taj tag i nalepi fajl u
-   Tumblr → Edit Theme → Edit HTML
-
-Kasnije promene: build → commit `dist/` → **novi tag** → izmeni verziju u obe URL-e u temi.
-Keš je vezan za tag, pa bez bump-a verzije stari bundle ostaje na sajtu.
-
-Za brzo testiranje bez novog taga koristi `raw.githack.com` (ista putanja, kratak keš) umesto
-`rawcdn.githack.com`. Za produkciju uvek tag — grana se menja pod nogama.
+`X-Content-Type-Options: nosniff`, pa browser odbija da izvrši skriptu. Repo mora da bude
+javan; svaki CDN koji proksira GitHub čita anonimno.
 
 ## Struktura
 
