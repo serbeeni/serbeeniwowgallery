@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react'
-import { NOTES_ICON_URL } from '../config/assets'
+import { NOTES_ICON_HOVER_URL, NOTES_ICON_URL } from '../config/assets'
 import { useNotes } from '../hooks/useNotes'
 import type { TumblrPost } from '../types'
 import { CusdisThread } from './CusdisThread'
@@ -39,7 +39,11 @@ export function PostNotes({ post, open, onToggle }: PostNotesProps) {
   return (
     <div className="post-notes">
       <div className="post-notes-bar">
-        {/* Icon only — the count lives in the tooltip so the button stays clean. */}
+        {/*
+          No `title` — a native tooltip on hover is unwanted. The count stays in
+          `aria-label`, which screen readers announce and browsers do not draw.
+          Both icons render; CSS swaps them so the hover art is already loaded.
+        */}
         <button
           className={`notes-toggle-btn${open ? ' is-open' : ''}`}
           onClick={(e) => {
@@ -48,9 +52,13 @@ export function PostNotes({ post, open, onToggle }: PostNotesProps) {
           }}
           aria-expanded={open}
           aria-label={label}
-          title={label}
         >
           <img className="notes-toggle-icon" src={NOTES_ICON_URL} alt="" />
+          <img
+            className="notes-toggle-icon is-hover"
+            src={NOTES_ICON_HOVER_URL}
+            alt=""
+          />
         </button>
       </div>
 

@@ -57,6 +57,19 @@
   pointer-events: none;
 }
 
+/* Hover art swaps in place — see DJOKA png ikona hover komentari in config/assets.ts. */
+.notes-toggle-icon.is-hover {
+  display: none;
+}
+
+.notes-toggle-btn:hover .notes-toggle-icon {
+  display: none;
+}
+
+.notes-toggle-btn:hover .notes-toggle-icon.is-hover {
+  display: block;
+}
+
 .notes-toggle-btn:hover {
   border-color: #ffcc00;
   filter: brightness(1.3) drop-shadow(0 0 5px rgba(255, 204, 0, 0.5));
