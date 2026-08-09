@@ -5,6 +5,53 @@ export const SOURCE_ID = 'tumblr-source'
 export const CONFIG_ID = 'tumblr-config'
 export const NEXT_PAGE_ID = 'nextPageLink'
 
+function isMediaNode(el: Element): boolean {
+  return (
+    el.tagName === 'IMG' ||
+    el.tagName === 'FIGURE' ||
+    el.querySelector('img, figure') !== null
+  )
+}
+
+/**
+ * Splits a post body into its picture and its words.
+ *
+ * NPF posts arrive as `{block:Text}` shaped like
+ *   <div class="npf_row">…<figure><img></figure>…</div><p>un'goro crater</p>
+ * so the trailing paragraph is the caption in everything but name. Keeping it separate lets
+ * it share a row with the notes toggle instead of sitting above it.
+ */
+function splitBody(bodyEl: Element): {
+  contentHtml: string | null
+  captionHtml: string | null
+} {
+  const content: string[] = []
+  const caption: string[] = []
+
+  for (const node of Array.from(bodyEl.childNodes)) {
+    if (node.nodeType === Node.TEXT_NODE) {
+      const text = node.textContent?.trim()
+      if (text) caption.push(text)
+      continue
+    }
+
+    if (node.nodeType !== Node.ELEMENT_NODE) continue
+    const el = node as Element
+    ;(isMediaNode(el) ? content : caption).push(el.outerHTML)
+  }
+
+  // A post with no picture is just prose — splitting it would strand the whole body in the
+  // caption slot, next to the notes toggle.
+  if (content.length === 0) {
+    return { contentHtml: bodyEl.innerHTML.trim() || null, captionHtml: null }
+  }
+
+  return {
+    contentHtml: content.join(''),
+    captionHtml: caption.join('') || null,
+  }
+}
+
 /** Reads one `<article class="tumblr-post">` emitted by `{block:Posts}`. */
 function parsePost(el: Element): TumblrPost | null {
   const id = el.getAttribute('data-post-id')
@@ -21,12 +68,23 @@ function parsePost(el: Element): TumblrPost | null {
   const inlineImg = bodyEl?.querySelector('img')?.getAttribute('src') ?? null
   const text = (el.textContent ?? '').replace(/\s+/g, ' ').trim()
 
+  const split = bodyEl
+    ? splitBody(bodyEl)
+    : { contentHtml: null, captionHtml: null }
+
+  // NPF wraps the picture in an anchor carrying the full-size URL; the visible <img> is a
+  // downscaled copy, so the lightbox would otherwise blow up a 500px thumbnail.
+  const bigPhoto =
+    bodyEl?.querySelector('[data-big-photo]')?.getAttribute('data-big-photo') ??
+    null
+
   return {
     id,
     type,
-    bodyHtml: bodyEl?.innerHTML.trim() || null,
-    captionHtml: captionEl?.innerHTML.trim() || null,
+    contentHtml: split.contentHtml,
+    captionHtml: captionEl?.innerHTML.trim() || split.captionHtml,
     photoUrl,
+    highResUrl: photoUrl ?? bigPhoto ?? inlineImg,
     thumbnailSrc: photoUrl ?? inlineImg,
     location: extractLocation(el.textContent ?? ''),
     permalink: el.getAttribute('data-permalink') || null,

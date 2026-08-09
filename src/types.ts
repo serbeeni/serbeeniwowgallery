@@ -5,12 +5,17 @@ export interface TumblrPost {
   /** `{PostID}` — unique per post, used for the DOM id and scroll targeting. */
   id: string
   type: PostType
-  /** `{Body}` for text posts. */
-  bodyHtml: string | null
-  /** `{Caption}` for photo posts. */
+  /**
+   * The media half of the post body — figures and images. Tumblr's newer (NPF) posts arrive
+   * as `text` with the picture inside `{Body}`, so this is where their image lives.
+   */
+  contentHtml: string | null
+  /** The trailing text of the body, or `{Caption}` on a classic photo post. */
   captionHtml: string | null
   /** `{PhotoURL-HighRes}` for photo posts. */
   photoUrl: string | null
+  /** Best available resolution for the lightbox — NPF hides it in `data-big-photo`. */
+  highResUrl: string | null
   /** Image shown in grid view, or null for text posts with no inline image. */
   thumbnailSrc: string | null
   /** Parsed out of the post text — drives the Filter menu. */

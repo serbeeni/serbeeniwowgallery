@@ -102,8 +102,21 @@
 /* POST TEXT & CAPTIONS */
 .post-body-render,
 .post-body-render p,
-.caption-fallback {
+.caption-fallback,
+.caption-fallback p {
   color: #ffffff !important;
   font-family: 'Arial Narrow', Arial, sans-serif !important;
   font-size: 1rem;
+}
+
+/* The caption shares a row with the notes toggle, so it must not add its own gaps. */
+.caption-fallback p {
+  margin: 0;
+}
+
+/* NPF wraps images in its own grid; keep those from stretching past the frame. */
+.post-body-render figure,
+.post-body-render .npf_row {
+  margin: 0;
+  max-width: 100%;
 }
