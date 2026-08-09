@@ -73,7 +73,30 @@ npm run build      # → dist/theme.js + dist/theme.css
 format koji `theme/theme.html` generiše, pa `npm run dev` koristi pravi parser. `dev/notes.html`
 glumi permalink stranicu sa notes-ima, da bi fioka sa komentarima radila lokalno.
 
-## Deploy
+## Deploy preko Vercel-a (preporučeno)
+
+`vercel.json` je već u repou — build komanda, output folder i keš zaglavlja. Ostaje da se
+projekat poveže, što se radi jednom u browseru:
+
+1. Prijava na [vercel.com](https://vercel.com) preko GitHub naloga
+2. **Add New → Project** → import `serbeeni/serbeeniwowgallery`
+3. Podešavanja ostavi kako ih Vercel pročita iz `vercel.json` (Build `npm run build`,
+   Output `dist`); env varijable nisu potrebne
+4. Deploy, pa u `theme/theme.html` upiši dobijeni domen:
+
+```
+https://<projekat>.vercel.app/theme.css
+https://<projekat>.vercel.app/theme.js
+```
+
+Od tog trenutka **push na `main` je deploy** — nema tagova ni ponovnog lepljenja teme u
+Tumblr. Zauzvrat, pokvaren build ide u produkciju istog trena, pa `npm run build` pre push-a
+prestaje da bude opcion.
+
+Keš je namerno postavljen na `must-revalidate`: imena fajlova se ne menjaju, pa bi dugačak
+keš značio da izmena visi nevidljiva.
+
+## Deploy preko githack-a (trenutno u upotrebi)
 
 Bundle se servira preko [githack](https://raw.githack.com/) direktno iz ovog repozitorijuma.
 `raw.githubusercontent.com` ne dolazi u obzir — šalje `text/plain` uz
