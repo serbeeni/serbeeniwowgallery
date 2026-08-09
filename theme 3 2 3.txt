@@ -1,0 +1,1917 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{Title}</title>
+    <link rel="shortcut icon" href="{Favicon}">
+    <link rel="alternate" type="application/rss+xml" href="{RSS}">
+    
+    {block:Description}
+        <meta name="description" content="{MetaDescription}" />
+    {/block:Description}
+
+    <!-- Clean Google Fonts Preconnect & Imports -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-color: #1a1c1e;        
+            --card-bg: #22252a;         
+            --text-main: #f0f2f5;       
+            --text-muted: #9aa0a6;      
+            --max-width: 1400px;       
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+body {
+    background-image: url('https://64.media.tumblr.com/8cf71ec3070c868f526b1ed00da77432/27f0076f1576f10e-4e/s2048x3072/b1f53ee684193f7548cdd3bc7c51bd2b07a3ad35.pnj');
+    background-repeat: repeat;
+    background-size: auto;
+    background-attachment: fixed;
+    background-position: center;
+    color: var(--text-main);
+    font-family: 'Inter', sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+        /* HEADER LAYOUT */
+        .blog-header {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            padding: 20px 20px 10px 20px;
+            text-align: center;
+        }
+
+        .blog-title {
+            text-align: center;
+            margin: 0;
+        }
+
+        .blog-title h1 {
+            font-family: 'Cinzel', serif !important;
+            font-size: 2.8rem;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            margin-bottom: 0.5rem;
+        }
+
+        .blog-title h1 a {
+            color: #ffcc00;
+            text-decoration: none !important;
+            border-bottom: none !important;
+            font-family: 'Cinzel', serif !important;
+            text-shadow: 
+                -1px -1px 0 #000,  
+                 1px -1px 0 #000,
+                -1px  1px 0 #000,
+                 1px  1px 0 #000;
+        }
+
+        .blog-title h1 a:hover {
+            color: #fffcf0;
+            text-decoration: none !important;
+            border-bottom: none !important;
+        }
+
+        .blog-bio {
+            text-align: center;
+            max-width: 850px;
+            font-size: 1.05rem;
+            color: var(--text-muted);
+            line-height: 1.7;
+            margin: 0.5rem auto 0 auto;
+        }
+
+        /* CONTROLS & BUTTONS */
+        .controls-wrapper {
+            max-width: 900px;
+            margin: 0 auto 2rem auto;
+            display: flex;
+            gap: 10px;
+            width: 100%;
+            align-items: center;
+        }
+
+        .toggle-btn {
+            border: none;
+            background: none;
+            cursor: pointer;
+            display: inline-block;
+            vertical-align: middle;
+            color: #ffcc00; /* Classic WoW Gold */
+            
+            font-family: 'Cinzel', serif !important;
+            font-size: 13px;
+            font-weight: 700;
+            text-shadow: 1px 1px 0 #000;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            
+            border-style: solid;
+            border-width: 14px;
+            border-image-source: url('https://64.media.tumblr.com/bfcae680f8325c36b4f88e62fb9de74b/c1c27d4513c34757-20/s1280x1920/14a063c2fef70486ed480fe75b40c920a238fd77.pnj');
+            border-image-slice: 36 fill;
+            border-image-repeat: repeat;
+            
+            padding: 0 16px; 
+            white-space: nowrap;
+            position: relative;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            
+            transition: filter 0.2s;
+            height: 40px;
+            line-height: 12px;
+        }
+
+        .toggle-btn:hover {
+            color: #fffcf0;
+            background: none !important;
+            border-color: transparent !important;
+            filter: brightness(1.3) drop-shadow(0 0 5px rgba(255, 204, 0, 0.4));
+        }
+
+        .toggle-btn:active {
+            border-image-source: url('https://64.media.tumblr.com/ebd3d619086b190048d0a67a600263d9/c1c27d4513c34757-a8/s1280x1920/09756b92d68377f3c8dacf829027422d2689e622.pnj') !important;
+            border-image-slice: 36 fill !important;
+            border-image-repeat: repeat !important;
+            
+            transform: none !important;
+            filter: none !important;
+            transition: none !important;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3) !important;
+        }
+
+        #loadAllBtn:disabled {
+            opacity: 1 !important;
+            cursor: default !important;
+            pointer-events: none !important;
+            box-shadow: none !important;
+        } 
+
+        .load-btn-wrapper {
+            position: relative;
+            display: inline-block;
+        }
+
+        .load-bar-track {
+            position: absolute;
+            bottom: -6px;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: rgba(212, 175, 55, 0.2);
+            border-radius: 2px;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.15s ease;
+            overflow: hidden;
+        }
+
+        .load-bar-track.active {
+            opacity: 1;
+        }
+
+        .load-bar-fill {
+            width: 0%;
+            height: 100%;
+            background: #d4af37;
+            box-shadow: 0 0 6px #d4af37, 0 0 2px #997519;
+            position: absolute;
+            left: 0;
+            transition: width 0.3s ease-out;
+        }
+
+        /* DROPDOWNS & SUBMENUS */
+        .menu-container {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+        }
+
+        .dropdown-content {
+            position: absolute;
+            top: 110%;
+            left: 0;
+            background: #22252a !important;
+            border: 1px solid rgba(255, 255, 255, 0.1) !important;
+            border-radius: 6px !important;
+            min-width: 0px;
+            z-index: 9999;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5) !important;
+            padding: 8px 0 !important;
+        }
+
+        .dropdown-content a,
+        .dropdown-content a:link,
+        .dropdown-content a:visited {
+            font-family: 'Cinzel', serif !important;
+            color: #ffcc00 !important;
+            padding: 10px 15px !important;
+            font-size: 13px !important;
+            text-transform: uppercase !important;
+            letter-spacing: 0.05em !important;
+            text-decoration: none !important;
+            display: block !important;
+            border-bottom: none !important;
+            background: none !important;
+            transition: all 0.2s ease !important;
+        }
+
+        .dropdown-content a:hover {
+            color: #fffcf0 !important;
+            background: #25282d !important;
+            padding-left: 20px !important;
+        }
+
+        .submenu-item {
+            position: relative;
+        }
+
+        .submenu-title {
+            display: flex !important;
+            justify-content: space-between !important;
+            align-items: center !important;
+            color: #ffcc00 !important;
+            font-family: 'Cinzel', serif !important;
+            font-size: 13px !important;
+            padding: 10px 15px !important;
+            cursor: pointer;
+            text-transform: uppercase !important;
+            letter-spacing: 0.05em !important;
+        }
+
+        .submenu-title:hover {
+            background: #25282d !important;
+            color: #fffcf0 !important;
+        }
+
+        .submenu-content {
+            display: none;
+            position: absolute;
+            top: 0;
+            left: 100%;
+            background: #22252a;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 6px;
+            min-width: 200px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            padding: 8px 0;
+            z-index: 10000;
+        }
+		
+
+        .submenu-item:hover > .submenu-content {
+            display: block;
+        }
+
+        /* CONTENT CONTAINERS */
+        #contentContainer {
+            transition: opacity 0.2s ease;
+        }
+
+        /* STREAM VIEW */
+        #contentContainer.stream-view {
+            max-width: 900px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 4rem; 
+        }
+
+        #contentContainer.stream-view article.post {
+            background: var(--card-bg);
+            border-radius: 8px;
+            overflow: hidden;
+            border-style: solid;
+            border-width: 28px;
+            border-image-source: url('https://64.media.tumblr.com/265b54e0678d3c1fb514c528bf74596f/2b2e4c379a19f487-c8/s250x400/f8768a3be47882762c529bcdb96adf22de796eee.pnj');
+            border-image-slice: 45 fill;
+            border-image-repeat: repeat;
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.5);
+            padding: 1.5rem 2rem;
+            scroll-margin-top: 5rem;
+        }
+
+        #contentContainer.stream-view .post-body-render {
+            display: block !important;
+        }
+
+        #contentContainer.stream-view .post-body-render img {
+            max-width: 100% !important;
+            height: auto !important;
+            display: block !important;
+            margin: 0 auto 1rem auto;
+            border-radius: 6px;
+        }
+
+        #contentContainer.stream-view .grid-snap-wrapper {
+            display: none !important;
+        }
+
+        /* GRID VIEW */
+        #contentContainer.grid-view {
+            max-width: var(--max-width);
+            margin: 2rem auto 4rem auto;
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 20px;
+            border-style: solid;
+            border-width: 28px;
+            border-image-source: url('https://64.media.tumblr.com/265b54e0678d3c1fb514c528bf74596f/2b2e4c379a19f487-c8/s250x400/f8768a3be47882762c529bcdb96adf22de796eee.pnj');
+            border-image-slice: 45 fill;
+            border-image-repeat: repeat;
+            box-shadow: 0 16px 45px rgba(0, 0, 0, 0.6);
+            padding: 2.5rem;
+        }
+
+        #contentContainer.grid-view article.post {
+            background: var(--card-bg);
+            border-radius: 6px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            padding: 0;
+            position: relative;
+            width: 100%;
+            padding-top: 56.25%;
+        }
+
+        #contentContainer.grid-view article.post:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+        }
+
+        #contentContainer.grid-view .grid-snap-wrapper {
+            display: block !important;
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            overflow: hidden;
+            background: #111;
+        }
+
+        #contentContainer.grid-view .grid-snap-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            margin: 0;
+        }
+
+        #contentContainer.grid-view .post-body-render {
+            display: none !important;
+        }
+
+        /* POST TEXT & CAPTIONS */
+        .post-body-render, 
+        .post-body-render p,
+        .caption-fallback {
+            color: #ffffff !important;
+            font-family: 'Arial Narrow', Arial, sans-serif !important;
+            font-size: 1rem;
+        }
+
+        /* BACK TO TOP BUTTON */
+        .back-to-top {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: rgba(45, 49, 56, 0.85);
+            backdrop-filter: blur(6px);
+            color: #f0f2f5;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            width: 46px;
+            height: 46px;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+            z-index: 999;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s ease, transform 0.2s ease, background 0.2s ease;
+        }
+
+        .back-to-top.visible {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .back-to-top:hover {
+            transform: translateY(-2px);
+            background: rgba(60, 65, 74, 0.95);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .pagination {
+            display: none !important;
+        }
+
+        .infinite-scroll-status {
+            text-align: center;
+            padding: 3rem 0;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            font-weight: 500;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            font-family: 'Cinzel', serif;
+        }
+
+        .version-tag {
+            position: fixed;
+            bottom: 10px;
+            right: 10px;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.65rem;
+            color: rgba(255, 255, 255, 0.15);
+            pointer-events: none;
+            z-index: 1000;
+            user-select: none;
+        }
+
+        @media (max-width: 992px) {
+            #contentContainer.grid-view { grid-template-columns: repeat(2, 1fr); }
+            .controls-wrapper { max-width: 100%; padding: 0 1rem; }
+        }
+
+        @media (max-width: 768px) {
+            body { padding: 1.5rem 0.5rem; }
+            .blog-title h1 { font-size: 2rem; }
+            #contentContainer.stream-view { gap: 2.5rem; }
+            .back-to-top { bottom: 1.5rem; right: 1.5rem; width: 40px; height: 40px; }
+        }
+    /* PREVENT TEXT WRAPPING IN DROPDOWNS */
+        .dropdown-content {
+            white-space: nowrap !important;
+            width: max-content !important;
+        }
+/* QUEST EXCLAMATION MARK */
+        .quest-icon-above {
+            position: absolute;
+            top: -18px; /* Floating snugly right above MENU */
+            left: 50%;
+            transform: translateX(-50%);
+            height: 14px; /* Small & proportional */
+            width: auto;
+            pointer-events: none;
+            animation: questBounce 1.8s ease-in-out infinite;
+            z-index: 100;
+        }
+
+        .quest-icon-inline {
+            height: 13px; /* Fits inside the line height of the dropdown link */
+            width: auto;
+            margin-left: 6px; /* Placed to the RIGHT of the text */
+            vertical-align: middle;
+            display: inline-block;
+        }
+
+        @keyframes questBounce {
+            0%, 100% { transform: translate(-50%, 0); }
+            50% { transform: translate(-50%, -4px); }
+        }
+	        /* CENTER ALL DROPDOWN TEXT */
+        .dropdown-content a,
+        .submenu-title,
+        .submenu-content a {
+            text-align: center !important;
+            justify-content: center !important;
+        }
+    
+/* PREVENT HOVER TEXT SHIFT & SHRINK */
+        .dropdown-content a:hover,
+        .submenu-content a:hover,
+        .submenu-title:hover {
+            padding-left: 16px !important;
+            padding-right: 16px !important;
+            margin-left: 0 !important;
+            margin-right: 0 !important;
+            transform: none !important;
+        }
+/* LOCK SORT BUTTON WIDTH & CENTER TEXT */
+        #standaloneSortBtn,
+        #sortToggleBtn {
+            width: 160px !important;
+            padding-left: 0 !important;
+            padding-right: 0 !important;
+            justify-content: center !important;
+            align-items: center !important;
+            text-align: center !important;
+            box-sizing: border-box !important;
+        }
+
+        /* FORCE HIDDEN UNTIL ALL LOADED */
+        #standaloneSortBtn[style*="display: none"],
+        #sortToggleBtn[style*="display: none"] {
+            display: none !important;
+        }
+
+        /* FLEX CENTERING WHEN REVEALED */
+        #standaloneSortBtn:not([style*="display: none"]),
+        #sortToggleBtn:not([style*="display: none"]) {
+            display: inline-flex !important;
+        }
+/* ==========================================
+           WOW CLASSIC DROPDOWN BEAUTIFICATION (FIXED)
+           ========================================== */
+
+        /* MAIN DROPDOWN CONTAINERS (GLASS & GOLD FRAME) */
+        .dropdown-content,
+        #dropdownMenu,
+        #filterMenu {
+            background: rgba(14, 15, 18, 0.96) !important;
+            backdrop-filter: blur(8px);
+            border: 1px solid #ffcc00 !important;
+            border-radius: 4px !important;
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.9), 
+                        0 0 12px rgba(255, 204, 0, 0.25),
+                        inset 0 0 15px rgba(0, 0, 0, 0.8) !important;
+            padding: 4px 0 !important;
+            overflow: visible !important; /* ALLOWS FLYOUT SUBMENUS TO DISPLAY */
+        }
+
+        /* SUBMENU CONTAINER RELATIVE POSITIONING */
+        .submenu-item {
+            position: relative !important;
+        }
+
+        /* SHOW FLYOUT SUBMENU ON HOVER */
+        .submenu-item:hover > .submenu-content {
+            display: block !important;
+        }
+
+        /* MENU ITEMS & LINKS */
+        .dropdown-content a,
+        .submenu-title,
+        .submenu-content a {
+            color: #d8c39d !important;
+            font-family: 'Cinzel', serif !important;
+            font-size: 12px !important;
+            letter-spacing: 0.08em !important;
+            text-transform: uppercase;
+            padding: 9px 16px !important;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.04) !important;
+            transition: background 0.15s ease, color 0.15s ease, text-shadow 0.15s ease !important;
+        }
+
+        /* CATEGORY SUBMENU HEADERS */
+        .submenu-title {
+            color: #ffcc00 !important;
+            background: rgba(0, 0, 0, 0.35) !important;
+            font-weight: 600;
+            border-bottom: 1px solid rgba(255, 204, 0, 0.2) !important;
+        }
+
+        /* SUBMENU FLYOUT POPUPS */
+        .submenu-content {
+            background: rgba(10, 11, 14, 0.98) !important;
+            border: 1px solid rgba(255, 204, 0, 0.6) !important;
+            border-radius: 3px !important;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.95), 0 0 8px rgba(255, 204, 0, 0.2) !important;
+            position: absolute !important;
+            left: 100% !important;
+            top: 0 !important;
+            z-index: 1000 !important;
+        }
+
+        /* GLOWING GOLD HOVER STATE */
+        .dropdown-content a:hover,
+        .submenu-content a:hover,
+        .submenu-title:hover {
+            color: #ffffff !important;
+            background: linear-gradient(90deg, rgba(255, 204, 0, 0.05), rgba(255, 204, 0, 0.22), rgba(255, 204, 0, 0.05)) !important;
+            text-shadow: 0 0 8px rgba(255, 204, 0, 0.7) !important;
+        }
+
+        /* REMOVE BOTTOM BORDER FROM LAST LINKS */
+        .dropdown-content a:last-child,
+        .submenu-content a:last-child {
+            border-bottom: none !important;
+        }
+	/* ==========================================
+           CENTER DROPDOWN MENUS UNDER BUTTONS
+           ========================================== */
+
+        /* ENSURE BUTTON WRAPPERS ACT AS ANCHORS */
+        .dropdown,
+        .menu-container,
+        .filter-container,
+        .toggle-btn-wrapper {
+            position: relative !important;
+        }
+
+        /* CENTER MAIN DROPDOWNS RELATIVE TO BUTTON MIDPOINT */
+        .dropdown-content,
+        #dropdownMenu,
+        #filterMenu {
+            left: 50% !important;
+            transform: translateX(-50%) !important;
+        }
+
+        /* PREVENT FLYOUT SUBMENUS FROM INHERITING CENTERING */
+        .submenu-content {
+            left: 100% !important;
+            transform: none !important;
+        }
+	/* MAKE DROPDOWNS AT LEAST AS WIDE AS THEIR PARENT BUTTON */
+        .dropdown-content,
+        #dropdownMenu,
+        #filterMenu {
+            min-width: 100% !important;
+            box-sizing: border-box !important;
+        }
+
+        /* MAKE MENU & FILTER BUTTONS THE EXACT SAME SIZE */
+        .menu-container button,
+        .filter-container button,
+        .dropdown > button {
+            min-width: 105px !important;
+            text-align: center !important;
+        }
+	/* LOCK GRID/COLUMN TOGGLE BUTTON WIDTH & CENTER TEXT */
+        #viewToggle {
+            width: 185px !important;
+            padding-left: 0 !important;
+            padding-right: 0 !important;
+            display: inline-flex !important;
+            justify-content: center !important;
+            align-items: center !important;
+            text-align: center !important;
+            box-sizing: border-box !important;
+        }
+	/* MAKE TOP-LEVEL LINKS (LIKE "ALL") BOLD TO MATCH CATEGORIES */
+        .dropdown-content > a {
+            font-weight: 600 !important;
+        }
+	/* UNIFORM BACKGROUND FOR ALL FILTER MENU ROWS */
+.dropdown-content > a,
+.dropdown-content .submenu-title {
+    background: transparent !important;
+}
+/* REMOVE ALL INTERNAL DIVIDER LINES FROM DROPDOWNS */
+        .dropdown-content a,
+        .dropdown-content .submenu-title,
+        .submenu-content a {
+            border-bottom: none !important;
+            border-top: none !important;
+        }
+	/* REMOVE BOX HOVER BACKGROUND & GLOW ONLY TEXT */
+        .dropdown-content a:hover,
+        .submenu-content a:hover {
+            background: transparent !important;
+            color: #ffffff !important;
+            text-shadow: 0 0 8px rgba(255, 209, 0, 0.8) !important;
+        }
+#scrollTopBtn {
+  /* 1. Strip rounding & background defaults */
+  border-radius: 0 !important;
+  background: none !important;
+  width: 44px !important;
+  height: 44px !important;
+  padding: 0 !important;
+
+  /* 2. Apply the exact WoW Gold Border-Image frame */
+  border-style: solid !important;
+  border-width: 14px !important;
+  border-image-source: url('https://64.media.tumblr.com/bfcae680f8325c36b4f88e62fb9de74b/c1c27d4513c34757-20/s1280x1920/14a063c2fef70486ed480fe75b40c920a238fd77.pnj') !important;
+  border-image-slice: 36 fill !important;
+  border-image-repeat: repeat !important;
+
+  /* 3. Typography & Icon alignment */
+  color: #ffcc00 !important;
+  font-family: 'Cinzel', serif !important;
+  font-size: 14px !important;
+  font-weight: 700 !important;
+  text-shadow: 1px 1px 0 #000 !important;
+
+  /* 4. Shadow & Glow Transitions */
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3) !important;
+  transition: filter 0.2s ease !important;
+}
+
+/* Keep stationary on hover & add gold glow */
+#scrollTopBtn:hover {
+  transform: none !important;
+  background: none !important;
+  border-color: transparent !important;
+  filter: brightness(1.3) drop-shadow(0 0 5px rgba(255, 204, 0, 0.4)) !important;
+}
+
+/* Click/Active pressed state frame */
+#scrollTopBtn:active {
+  border-image-source: url('https://64.media.tumblr.com/ebd3d619086b190048d0a67a600263d9/c1c27d4513c34757-a8/s1280x1920/09756b92d68377f3c8dacf829027422d2689e622.pnj') !important;
+  border-image-slice: 36 fill !important;
+  border-image-repeat: repeat !important;
+  transform: none !important;
+  filter: none !important;
+}
+/* BOTTOM LEFT MUSIC TOGGLE (SQUARE FRAME) */
+.music-control-wrapper {
+    position: fixed;
+    bottom: 2rem;
+    left: 2rem;
+    z-index: 999;
+}
+
+#musicToggleBtn {
+    width: 44px !important;
+    height: 44px !important;
+    padding: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    
+    border-style: solid !important;
+    border-width: 14px !important;
+    border-image-source: url('https://64.media.tumblr.com/bfcae680f8325c36b4f88e62fb9de74b/c1c27d4513c34757-20/s1280x1920/14a063c2fef70486ed480fe75b40c920a238fd77.pnj') !important;
+    border-image-slice: 36 fill !important;
+    border-image-repeat: repeat !important;
+    
+    color: #ffcc00 !important;
+    font-family: 'Cinzel', serif !important;
+    font-size: 15px !important;
+    font-weight: 700 !important;
+    text-shadow: 1px 1px 0 #000 !important;
+    cursor: pointer !important;
+    
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3) !important;
+    transition: filter 0.2s ease !important;
+}
+
+#musicToggleBtn:hover {
+    transform: none !important;
+    background: none !important;
+    border-color: transparent !important;
+    filter: brightness(1.3) drop-shadow(0 0 5px rgba(255, 204, 0, 0.4)) !important;
+}
+
+#musicToggleBtn:active {
+    border-image-source: url('https://64.media.tumblr.com/ebd3d619086b190048d0a67a600263d9/c1c27d4513c34757-a8/s1280x1920/09756b92d68377f3c8dacf829027422d2689e622.pnj') !important;
+    border-image-slice: 36 fill !important;
+    border-image-repeat: repeat !important;
+    transform: none !important;
+    filter: none !important;
+}
+
+/* Strikethrough style when music is off */
+#musicToggleBtn s {
+    text-decoration: line-through;
+    opacity: 0.75;
+}
+	/* 1. Default / Normal Cursor */
+body, html {
+    cursor: url('https://files.catbox.moe/qvf0h3.cur'), auto !important;
+}
+
+/* 2. Hover Cursor for Buttons, Links & Menus */
+a, button, .toggle-btn, .submenu-title, .submenu-content a, #standaloneSortBtn, #musicToggleBtn, #scrollTopBtn {
+    cursor: url('https://files.catbox.moe/wi8vl7.cur'), pointer !important;
+}
+
+/* 3. Hover Cursor for Images */
+img, .post-body-render img, .grid-snap-wrapper img {
+    cursor: url('https://files.catbox.moe/ndwvgc.cur'), zoom-in !important;
+}
+/* 4. Hover Cursor for Blog Title & Home Link */
+.blog-title h1 a, #dropdownMenu a[href="/"] {
+    cursor: url('https://files.catbox.moe/java91.cur'), pointer !important;
+}
+	/* BOTTOM LEFT MUSIC TOGGLE & TRACK BADGE */
+        .music-control-wrapper {
+            position: fixed;
+            bottom: 2rem;
+            left: 2rem;
+            z-index: 999;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        #musicToggleBtn {
+            width: 44px !important;
+            height: 44px !important;
+            padding: 0 !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            
+            border-style: solid !important;
+            border-width: 14px !important;
+            border-image-source: url('https://64.media.tumblr.com/bfcae680f8325c36b4f88e62fb9de74b/c1c27d4513c34757-20/s1280x1920/14a063c2fef70486ed480fe75b40c920a238fd77.pnj') !important;
+            border-image-slice: 36 fill !important;
+            border-image-repeat: repeat !important;
+            
+            color: #ffcc00 !important;
+            font-family: 'Cinzel', serif !important;
+            font-size: 15px !important;
+            font-weight: 700 !important;
+            text-shadow: 1px 1px 0 #000 !important;
+            
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3) !important;
+            transition: filter 0.2s ease !important;
+        }
+
+        #musicToggleBtn:hover {
+            transform: none !important;
+            background: none !important;
+            border-color: transparent !important;
+            filter: brightness(1.3) drop-shadow(0 0 5px rgba(255, 204, 0, 0.4)) !important;
+        }
+
+        #musicToggleBtn:active {
+            border-image-source: url('https://64.media.tumblr.com/ebd3d619086b190048d0a67a600263d9/c1c27d4513c34757-a8/s1280x1920/09756b92d68377f3c8dacf829027422d2689e622.pnj') !important;
+            border-image-slice: 36 fill !important;
+            border-image-repeat: repeat !important;
+            transform: none !important;
+            filter: none !important;
+        }
+
+        #musicToggleBtn s {
+            text-decoration: line-through;
+            opacity: 0.75;
+        }
+
+/* BOTTOM LEFT MUSIC TOGGLE & TRACK BADGE */
+.music-control-wrapper {
+    position: fixed;
+    bottom: 2rem;
+    left: 2rem;
+    z-index: 999;
+    display: flex;
+    align-items: center;
+}
+
+#nowPlayingTrack {
+    position: absolute;
+    left: calc(100% + 10px);
+    top: 0x; /* Aligns vertical center with the icon */
+    font-family: 'Cinzel', serif;
+    font-size: 11px;
+    color: #ffcc00;
+    text-shadow: 1px 1px 0 #000;
+    background: rgba(14, 15, 18, 0.92);
+    padding: 8px 12px;
+    border: 1px solid #ffcc00;
+    border-radius: 4px;
+    width: max-content;
+    max-width: 260px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateX(-6px);
+    backface-visibility: hidden;
+    
+    /* Buffer delay when mouse leaves */
+    transition: opacity 0.25s ease, transform 0.25s ease, visibility 0.25s ease;
+    transition-delay: 0.8s; 
+    
+    pointer-events: none;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+/* Invisible bridge covering the 10px gap to prevent cursor drops */
+#nowPlayingTrack::before {
+    content: '';
+    position: absolute;
+    left: -12px;
+    top: -10px;
+    width: 12px;
+    height: calc(100% + 20px);
+}
+
+.music-control-wrapper:hover #nowPlayingTrack.has-track {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(0);
+    pointer-events: auto;
+    
+    /* Pops up instantly on hover */
+    transition-delay: 0s; 
+}
+
+#nowPlayingText {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* WOW GOLD VOLUME SLIDER & CUSTOM CURSOR */
+#volumeSlider {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 4px;
+    background: #111215;
+    border: 1px solid rgba(255, 204, 0, 0.4);
+    border-radius: 2px;
+    outline: none;
+    cursor: url('https://files.catbox.moe/wi8vl7.cur'), pointer !important;
+}
+
+#volumeSlider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #ffcc00;
+    border: 1px solid #000;
+    box-shadow: 0 0 4px rgba(255, 204, 0, 0.8);
+    cursor: url('https://files.catbox.moe/wi8vl7.cur'), pointer !important;
+}
+
+#volumeSlider::-moz-range-thumb {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #ffcc00;
+    border: 1px solid #000;
+    box-shadow: 0 0 4px rgba(255, 204, 0, 0.8);
+    cursor: url('https://files.catbox.moe/wi8vl7.cur'), pointer !important;
+}
+        /* DISABLE TITLE HOVER GLOW */
+        .blog-title h1 a:hover {
+            color: #ffcc00 !important;
+            text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000 !important;
+            filter: none !important;
+        }
+
+        /* CURSOR SYSTEM */
+        body, html {
+            cursor: url('https://files.catbox.moe/qvf0h3.cur'), auto !important;
+        }
+
+        a, button, .toggle-btn, .submenu-title, .submenu-content a, #standaloneSortBtn, #musicToggleBtn, #scrollTopBtn {
+            cursor: url('https://files.catbox.moe/wi8vl7.cur'), pointer !important;
+        }
+
+        img, .post-body-render img, .grid-snap-wrapper img {
+            cursor: url('https://files.catbox.moe/ndwvgc.cur'), zoom-in !important;
+        }
+
+        .blog-title h1 a, #dropdownMenu a[href="/"] {
+            cursor: url('https://files.catbox.moe/java91.cur'), pointer !important;
+        }
+	
+	/* ONE-TIME QUEST CURSOR FOR GUIDE BUTTON */
+a.has-quest-cursor {
+    cursor: url('https://files.catbox.moe/sawzwx.cur'), pointer !important;
+}
+/* ANIMATED WEBP BACKGROUND */
+body {
+    background-color: #0e0f12; /* Dark fallback while loading */
+}
+
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: -999;
+    pointer-events: none;
+    background: #0e0f12 url('https://files.catbox.moe/h3bix0.webp') center/cover no-repeat;
+    
+    /* Fine-tune ambient brightness, contrast, and blur */
+    filter: brightness(0.75) contrast(1.05) blur(4px);
+    
+    /* Slightly scale up to prevent blurred edges from clipping at the screen borders */
+    transform: scale(1.05);
+}
+/* FULLSCREEN CUSTOM CURSOR */
+#custom-fullscreen-overlay,
+#custom-fullscreen-overlay img {
+    cursor: url('https://files.catbox.moe/pc0q9w.cur'), zoom-out !important;
+}
+    
+</style>
+</head>
+<body>
+
+    <header class="blog-header" id="topAnchor">
+        <div class="blog-title">
+            <h1><a href="/">{Title}</a></h1>
+        </div>
+        {block:Description}
+            <div class="blog-description blog-bio">{Description}</div>
+        {/block:Description}
+    </header>
+
+    <div class="controls-wrapper">
+        <!-- LEFT SIDE: Menu ▼ & Filter ▼ -->
+        <div class="menu-container">
+            <button class="toggle-btn" onclick="toggleMenu()">Menu ▼</button>
+            <div id="dropdownMenu" class="dropdown-content" style="display:none;">
+                <a href="/">Home</a>
+                {block:HasPages}
+                    {block:Pages}
+                        <a href="{URL}">{Label}</a>
+                    {/block:Pages}
+                {/block:HasPages}
+            </div>
+        </div>
+
+        <div class="menu-container">
+            <button class="toggle-btn" onclick="toggleFilterMenu()">Filter ▼</button>
+            <div id="filterMenu" class="dropdown-content" style="display:none;">
+            </div>
+        </div>
+
+        <!-- PUSHES REMAINING BUTTONS TO RIGHT -->
+        <div class="spacer" style="flex-grow: 1;"></div>
+
+        <!-- RIGHT SIDE: Load All & Switch to Grid -->
+        <div class="load-btn-wrapper">
+            <button class="toggle-btn" id="loadAllBtn" onclick="loadAllPosts()">
+                <span id="loadAllBtnText">Load All</span>
+            </button>
+            <div class="load-bar-track" id="loadBarTrack">
+                <div class="load-bar-fill" id="loadBarFill"></div>
+            </div>
+        </div>
+        <button class="toggle-btn" id="viewToggle" onclick="toggleLayout()">Switch to Grid</button>
+    </div>
+
+    <main id="contentContainer" class="stream-view">
+        {block:Posts}
+            {block:Text}
+                <article class="post" id="post-{PostID}" onclick="handlePostClick('post-{PostID}')">
+                    <div class="grid-snap-wrapper"></div>
+                    <div class="post-body-render">
+                        {Body}
+                    </div>
+                </article>
+            {/block:Text}
+
+            {block:Photo}
+                <article class="post" id="post-{PostID}" data-raw-src="{PhotoURL-HighRes}" onclick="handlePostClick('post-{PostID}')">
+                    <div class="grid-snap-wrapper"></div>
+                    <div class="post-body-render">
+                        <img src="{PhotoURL-HighRes}" alt="Gallery Entry" loading="lazy">
+                        {block:Caption}<div class="caption-fallback">{Caption}</div>{/block:Caption}
+                    </div>
+                </article>
+            {/block:Photo}
+        {/block:Posts}
+    </main>
+
+    <div class="infinite-scroll-status" id="scrollStatus" style="display: none;">Loading...</div>
+
+    <button class="back-to-top" id="scrollTopBtn" onclick="scrollToTop()" aria-label="Back to Top">▲</button>
+
+    {block:Pagination}
+        <nav class="pagination">
+            {block:NextPage}<a href="{NextPage}" id="nextPageLink">Next</a>{/block:NextPage}
+        </nav>
+    {/block:Pagination}
+
+<script>
+let currentFilter = 'all';
+let isFetchingPage = false;
+let isBatchLoading = false;
+let allLogsLoaded = false;
+
+// --- MENU TOGGLES ---
+function closeAllMenus() {
+    const menus = document.querySelectorAll('.dropdown-content');
+    menus.forEach(menu => {
+        menu.style.display = "none";
+    });
+}
+
+function toggleMenu() {
+    const menu = document.getElementById("dropdownMenu");
+    const isOpen = (menu.style.display === "block");
+    closeAllMenus();
+    menu.style.display = isOpen ? "none" : "block";
+}
+
+function toggleFilterMenu() {
+    const menu = document.getElementById("filterMenu");
+    const isOpen = (menu.style.display === "block");
+    closeAllMenus();
+    menu.style.display = isOpen ? "none" : "block";
+}
+
+window.addEventListener('click', function(e) {
+    if (!e.target.closest('.menu-container')) {
+        closeAllMenus();
+    }
+});
+
+// --- LIGHTBOX FULLSCREEN ---
+function interceptTumblrMice(e) {
+    const lightbox = e.target.closest('.tmblr-lightbox, #tumblr_lightbox, .lightbox-wrapper');
+    if (!lightbox || e.target.tagName !== 'IMG') return;
+    
+    if (e.target.closest('.tmblr-lightbox-close, .lightbox-close, .close-button, .tmblr-lightbox-next, .tmblr-lightbox-prev')) {
+        return;
+    }
+
+    e.preventDefault();
+    e.stopImmediatePropagation();
+    if (e.type === 'click') {
+        launchPerfectFullscreen(e.target);
+    }
+}
+document.addEventListener('click', interceptTumblrMice, { capture: true });
+document.addEventListener('mousedown', interceptTumblrMice, { capture: true });
+document.addEventListener('mouseup', interceptTumblrMice, { capture: true });
+
+function launchPerfectFullscreen(targetImg) {
+    if (document.getElementById('custom-fullscreen-overlay')) return;
+
+    const overlay = document.createElement('div');
+    overlay.id = 'custom-fullscreen-overlay';
+    overlay.style.cssText = `
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        width: 100vw !important;
+        height: 100vh !important;
+        background: #000000 !important;
+        z-index: 2147483647 !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        cursor: url('https://files.catbox.moe/pc0q9w.cur'), zoom-out !important;
+    `;
+
+    const fsImg = document.createElement('img');
+    fsImg.src = targetImg.getAttribute('data-highres') || targetImg.getAttribute('data-src') || targetImg.src;
+    fsImg.style.cssText = `
+        width: 100% !important;
+        height: 100% !important;
+        max-width: 100vw !important;
+        max-height: 100vh !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        display: block !important;
+        object-fit: contain !important;
+    `;
+
+    overlay.appendChild(fsImg);
+    document.body.appendChild(overlay);
+
+    if (overlay.requestFullscreen) {
+        overlay.requestFullscreen().catch(() => {});
+    } else if (overlay.webkitRequestFullscreen) {
+        overlay.webkitRequestFullscreen();
+    }
+
+    overlay.addEventListener('click', function(evt) {
+        evt.preventDefault();
+        evt.stopImmediatePropagation();
+        triggerSafeClose();
+    }, { capture: true });
+}
+
+function triggerSafeClose() {
+    const overlay = document.getElementById('custom-fullscreen-overlay');
+    if (!overlay) return;
+    const isFullscreen = document.fullscreenElement === overlay || document.webkitFullscreenElement === overlay;
+    if (isFullscreen) {
+        if (document.exitFullscreen) document.exitFullscreen().catch(() => { overlay.remove(); });
+        else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
+    } else {
+        overlay.remove();
+    }
+}
+
+document.addEventListener('keydown', function(evt) {
+    if (evt.key === 'Escape') {
+        const overlay = document.getElementById('custom-fullscreen-overlay');
+        if (overlay) {
+            evt.preventDefault();
+            evt.stopImmediatePropagation();
+            triggerSafeClose();
+        }
+    }
+}, { capture: true });
+
+function handleFullscreenChange(e) {
+    const overlay = document.getElementById('custom-fullscreen-overlay');
+    if (overlay) {
+        e.stopImmediatePropagation();
+        if (!document.fullscreenElement && !document.webkitFullscreenElement) {
+            overlay.remove();
+        }
+    }
+}
+document.addEventListener('fullscreenchange', handleFullscreenChange, { capture: true });
+document.addEventListener('webkitfullscreenchange', handleFullscreenChange, { capture: true });
+
+// --- GRID & LAYOUT LOGIC ---
+const container = document.getElementById('contentContainer');
+const toggleBtn = document.getElementById('viewToggle');
+const scrollTopBtn = document.getElementById('scrollTopBtn');
+const scrollStatus = document.getElementById('scrollStatus');
+
+let nextPageUrl = document.getElementById('nextPageLink') ? document.getElementById('nextPageLink').href : null;
+
+function generateGridThumbnails(targetContext = document) {
+    const posts = targetContext.querySelectorAll('article.post');
+    posts.forEach(post => {
+        const snapWrapper = post.querySelector('.grid-snap-wrapper');
+        if (!snapWrapper) return;
+        let directSrc = post.getAttribute('data-raw-src');
+        if (!directSrc) {
+            const inlineImg = post.querySelector('.post-body-render img');
+            if (inlineImg) directSrc = inlineImg.src;
+        }
+        if (directSrc && snapWrapper.children.length === 0) {
+            const newImg = document.createElement('img');
+            newImg.src = directSrc;
+            newImg.setAttribute('loading', 'lazy');
+            newImg.alt = "Grid Preview Image";
+            snapWrapper.appendChild(newImg);
+        }
+    });
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+    generateGridThumbnails(document);
+    buildCaptionFilters();
+});
+
+function toggleLayout() {
+    if (container.classList.contains('stream-view')) {
+        container.classList.remove('stream-view');
+        container.classList.add('grid-view');
+        toggleBtn.innerText = "Switch to Column";
+    } else {
+        container.classList.remove('grid-view');
+        container.classList.add('stream-view');
+        toggleBtn.innerText = "Switch to Grid";
+    }
+}
+
+function handlePostClick(postId) {
+    if (!container.classList.contains('grid-view')) return;
+    container.classList.remove('grid-view');
+    container.classList.add('stream-view');
+    toggleBtn.innerText = "Switch to Grid";
+    setTimeout(() => {
+        const targetPost = document.getElementById(postId);
+        if (targetPost) targetPost.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 50);
+}
+
+window.addEventListener('scroll', () => {
+    if (window.scrollY > 400) {
+        scrollTopBtn.classList.add('visible');
+    } else {
+        scrollTopBtn.classList.remove('visible');
+    }
+    if (!nextPageUrl || isFetchingPage) return;
+    if ((window.innerHeight + window.scrollY) >= (document.documentElement.scrollHeight - 900)) {
+         fetchNextPage();
+    }
+});
+
+function scrollToTop() {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// --- FULL FILTER DICTIONARY ---
+const FILTER_DICTIONARY = {
+    // --- KALIMDOR ---
+    "Ashenvale": "Kalimdor",
+    "Ashenvale, Astranaar": "Kalimdor",
+    "Azshara": "Kalimdor",
+    "Darkshore": "Kalimdor",
+    "Darkshore, Auberdine": "Kalimdor",
+    "Darnassus": "Kalimdor",
+    "Darnassus, Teldrassil": "Kalimdor",
+    "Desolace": "Kalimdor",
+    "Durotar": "Kalimdor",
+    "Dustwallow Marsh": "Kalimdor",
+    "Dustwallow Marsh, Theramore Isle": "Kalimdor",
+    "Felwood": "Kalimdor",
+    "Feralas": "Kalimdor",
+    "Moonglade": "Kalimdor",
+    "Moonglade, Nighthaven": "Kalimdor",
+    "Mulgore": "Kalimdor",
+    "Orgrimmar": "Kalimdor",
+    "Silithus": "Kalimdor",
+    "Stonetalon Mountains": "Kalimdor",
+    "Tanaris": "Kalimdor",
+    "Teldrassil": "Kalimdor",
+    "The Barrens": "Kalimdor",
+    "Thousand Needles": "Kalimdor",
+    "Thunder Bluff": "Kalimdor",
+    "Un'Goro Crater": "Kalimdor",
+    "Winterspring": "Kalimdor",
+
+    // --- EASTERN KINGDOMS ---
+    "Alterac Mountains": "Eastern Kingdoms",
+    "Arathi Highlands": "Eastern Kingdoms",
+    "Badlands": "Eastern Kingdoms",
+    "Blasted Lands": "Eastern Kingdoms",
+    "Burning Steppes": "Eastern Kingdoms",
+    "Deadwind Pass": "Eastern Kingdoms",
+    "Deeprun Tram": "Eastern Kingdoms",
+    "Dun Morogh": "Eastern Kingdoms",
+    "Duskwood": "Eastern Kingdoms",
+    "Eastern Plaguelands": "Eastern Kingdoms",
+    "Elwynn Forest": "Eastern Kingdoms",
+    "Hillsbrad Foothills": "Eastern Kingdoms",
+    "Ironforge": "Eastern Kingdoms",
+    "Ironforge, Dun Morogh": "Eastern Kingdoms",
+    "Loch Modan": "Eastern Kingdoms",
+    "Plaguelands": "Eastern Kingdoms",
+    "Redridge Mountains": "Eastern Kingdoms",
+    "Searing Gorge": "Eastern Kingdoms",
+    "Silverpine Forest": "Eastern Kingdoms",
+    "Stormwind City": "Eastern Kingdoms",
+    "Stormwind City, Elwynn Forest": "Eastern Kingdoms",
+    "Stranglethorn Vale": "Eastern Kingdoms",
+    "Stranglethorn Vale, Booty Bay": "Eastern Kingdoms",
+    "Swamp of Sorrows": "Eastern Kingdoms",
+    "The Hinterlands": "Eastern Kingdoms",
+    "Tirisfal Glades": "Eastern Kingdoms",
+    "Undercity": "Eastern Kingdoms",
+    "Western Plaguelands": "Eastern Kingdoms",
+    "Westfall": "Eastern Kingdoms",
+    "Wetlands": "Eastern Kingdoms",
+    "Wetlands, Menethil Harbor": "Eastern Kingdoms",
+
+    // --- DUNGEONS & RAIDS ---
+    "Ragefire Chasm, Durotar": "Dungeons",
+    "Wailing Caverns, The Barrens": "Dungeons",
+    "The Deadmines, Westfall": "Dungeons",
+    "Shadowfang Keep, Silverpine Forest": "Dungeons",
+    "The Stockade, Stormwind City": "Dungeons",
+    "Stormwind Stockade, Stormwind City": "Dungeons",
+    "Blackfathom Deeps, Ashenvale": "Dungeons",
+    "Gnomeregan, Dun Morogh": "Dungeons",
+    "Razorfen Kraul, The Barrens": "Dungeons",
+    "Razorfen Downs, The Barrens": "Dungeons",
+    "Scarlet Monastery, Tirisfal Glades": "Dungeons",
+    "Uldaman, Badlands": "Dungeons",
+    "Zul'Farrak, Tanaris": "Dungeons",
+    "Maraudon, Desolace": "Dungeons",
+    "The Temple of Atal'Hakkar, Swamp of Sorrows": "Dungeons",
+    "Sunken Temple, Swamp of Sorrows": "Dungeons",
+    "Blackrock Depths, Searing Gorge": "Dungeons",
+    "Lower Blackrock Spire, Searing Gorge": "Dungeons",
+    "Upper Blackrock Spire, Searing Gorge": "Dungeons",
+    "Dire Maul, Feralas": "Dungeons",
+    "Scholomance, Western Plaguelands": "Dungeons",
+    "Stratholme, Eastern Plaguelands": "Dungeons",
+    "Molten Core, Searing Gorge": "Dungeons",
+    "Blackwing Lair, Searing Gorge": "Dungeons",
+    "Onyxia's Lair, Dustwallow Marsh": "Dungeons",
+    "Zul'Gurub, Stranglethorn Vale": "Dungeons",
+    "Ruins of Ahn'Qiraj, Silithus": "Dungeons",
+    "Temple of Ahn'Qiraj, Silithus": "Dungeons",
+    "Naxxramas, Eastern Plaguelands": "Dungeons"
+};
+
+function buildCaptionFilters() {
+    const dropdown = document.getElementById('filterMenu');
+    if (!dropdown) return;
+    
+    dropdown.innerHTML = '';
+
+    if (isBatchLoading) {
+        const waitItem = document.createElement('a');
+        waitItem.textContent = "Please wait...";
+        waitItem.href = "#";
+        waitItem.style.cursor = "default";
+        waitItem.style.opacity = "0.6";
+        waitItem.onclick = (e) => e.preventDefault();
+        dropdown.appendChild(waitItem);
+        return;
+    }
+
+	if (!allLogsLoaded && nextPageUrl) {
+        const loadItem = document.createElement('a');
+        loadItem.textContent = "Load All";
+        loadItem.href = "#";
+        loadItem.onclick = (e) => {
+            e.preventDefault();
+            e.stopPropagation(); // STOPS EVENT FROM BUBBLING TO WINDOW & CLOSING MENU
+            loadAllPosts();
+        };
+        dropdown.appendChild(loadItem);
+        return;
+    }
+    const allLink = document.createElement('a');
+    allLink.textContent = "All";
+    allLink.href = "#";
+    allLink.onclick = function(e) {
+        e.preventDefault();
+        filterPosts('all');
+        closeAllMenus();
+    };
+    dropdown.appendChild(allLink);
+    
+    const posts = document.querySelectorAll('article.post');
+    const locations = new Set();
+    posts.forEach(function(post) {
+        const match = post.textContent.match(/-\s*(.+)$/);
+        if (match) {
+            locations.add(match[1].trim());
+        } else {
+            const fallbackText = post.textContent.trim();
+            if (fallbackText) locations.add(fallbackText);
+        }
+    });
+
+    const sortedLocations = Array.from(locations).sort((a, b) => a.localeCompare(b, undefined, { sensitivity: 'base' }));
+
+    const categoryOrder = ["Kalimdor", "Eastern Kingdoms", "Dungeons", "Other"];
+    const categoryMap = { "Kalimdor": [], "Eastern Kingdoms": [], "Dungeons": [], "Other": [] };
+
+    sortedLocations.forEach(function(loc) {
+        const locKey = Object.keys(FILTER_DICTIONARY).find(k => k.toLowerCase() === loc.toLowerCase());
+        const category = locKey ? FILTER_DICTIONARY[locKey] : "Other";
+        categoryMap[category].push(loc);
+    });
+
+    categoryOrder.forEach(function(catName) {
+        const catLocations = categoryMap[catName];
+        if (!catLocations || catLocations.length === 0) return;
+
+        const subContainer = document.createElement('div');
+        subContainer.className = 'submenu-item';
+
+        const titleDiv = document.createElement('div');
+        titleDiv.className = 'submenu-title';
+
+        const labelSpan = document.createElement('span');
+        labelSpan.textContent = catName;
+
+        const arrowSpan = document.createElement('span');
+        arrowSpan.style.fontSize = '10px';
+        arrowSpan.style.marginLeft = '10px';
+        arrowSpan.textContent = '▶';
+
+        titleDiv.appendChild(labelSpan);
+        titleDiv.appendChild(arrowSpan);
+
+        const subContent = document.createElement('div');
+        subContent.className = 'submenu-content';
+
+        catLocations.forEach(function(loc) {
+            const link = document.createElement('a');
+            link.textContent = loc.charAt(0).toUpperCase() + loc.slice(1);
+            link.href = "#";
+            link.onclick = function(e) { 
+                e.preventDefault(); 
+                filterPosts(loc); 
+                closeAllMenus();
+            };
+            subContent.appendChild(link);
+        });
+
+        subContainer.appendChild(titleDiv);
+        subContainer.appendChild(subContent);
+        dropdown.appendChild(subContainer);
+    });
+}
+
+function fetchNextPage() {
+    if (!nextPageUrl || isFetchingPage) return Promise.resolve(false);
+    isFetchingPage = true;
+    scrollStatus.style.display = 'block';
+
+    return fetch(nextPageUrl)
+        .then(response => response.text())
+        .then(htmlString => {
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(htmlString, 'text/html');
+            const fragment = doc.getElementById('contentContainer');
+         
+            if (fragment) {
+                const newPosts = fragment.querySelectorAll('article.post');
+                newPosts.forEach(post => {
+                    generateGridThumbnails(fragment);
+                    container.appendChild(post);
+
+                    if (currentFilter !== 'all') {
+                        const match = post.textContent.match(/-\s*(.+)$/);
+                        const postLoc = match ? match[1].trim().toLowerCase() : post.textContent.trim().toLowerCase();
+                        post.style.display = (postLoc === currentFilter.toLowerCase()) ? 'block' : 'none';
+                    }
+                });
+            }
+        
+            const newNextLink = doc.getElementById('nextPageLink');
+            nextPageUrl = newNextLink ? newNextLink.href : null;
+            isFetchingPage = false;
+            scrollStatus.style.display = 'none';
+            buildCaptionFilters();
+            return true;
+        })
+        .catch(err => {
+            console.error("Infinite scroll failed:", err);
+            isFetchingPage = false;
+            scrollStatus.style.display = 'none';
+            return false;
+        });
+}
+
+async function loadAllPosts() {
+    const btn = document.getElementById('loadAllBtn');
+    const btnText = document.getElementById('loadAllBtnText');
+    const track = document.getElementById('loadBarTrack');
+    const fill = document.getElementById('loadBarFill');
+
+    if (isBatchLoading) return;
+
+    if (!nextPageUrl) {
+        allLogsLoaded = true;
+        if (btn) btn.disabled = true;
+        if (btnText) btnText.innerText = "ALL LOADED";
+        if (track && fill) {
+            track.classList.add('active');
+            fill.style.width = '100%';
+            setTimeout(() => track.classList.remove('active'), 300);
+        }
+        buildCaptionFilters();
+        return;
+    }
+
+    isBatchLoading = true;
+    if (btn) btn.disabled = true;
+    if (btnText) btnText.innerText = "LOADING...";
+    
+    let currentProgress = 15;
+    if (track && fill) {
+        track.classList.add('active');
+        fill.style.width = currentProgress + '%';
+    }
+
+    buildCaptionFilters();
+
+    while (nextPageUrl) {
+        const success = await fetchNextPage();
+        
+        if (currentProgress < 90) {
+            currentProgress += (90 - currentProgress) * 0.25;
+            if (fill) fill.style.width = currentProgress + '%';
+        }
+
+        if (!success) {
+            await new Promise(resolve => setTimeout(resolve, 200));
+            if (!nextPageUrl) break;
+        }
+    }
+
+    allLogsLoaded = true;
+    isBatchLoading = false;
+
+    if (btn) btn.disabled = true;
+    if (btnText) btnText.innerText = "ALL LOADED";
+    if (track && fill) {
+        fill.style.width = '100%';
+        setTimeout(() => {
+            track.classList.remove('active');
+        }, 300);
+    }
+    buildCaptionFilters();
+}
+
+function filterPosts(loc) {
+    if (loc === currentFilter) return;
+    currentFilter = loc;
+    const posts = document.querySelectorAll('article.post');
+    posts.forEach(post => {
+        if (loc === 'all') {
+            post.style.display = 'block';
+        } else {
+            const match = post.textContent.match(/-\s*(.+)$/);
+            const postLoc = match ? match[1].trim().toLowerCase() : post.textContent.trim().toLowerCase();
+            post.style.display = (postLoc === loc.toLowerCase()) ? 'block' : 'none';
+        }
+    });
+}
+
+// --- GLOBAL KEYBOARD SHORTCUTS ---
+document.addEventListener('keydown', function(e) {
+    const activeTag = document.activeElement ? document.activeElement.tagName : '';
+    if (['INPUT', 'TEXTAREA', 'SELECT'].includes(activeTag) || document.activeElement.isContentEditable) return;
+    if (e.ctrlKey || e.altKey || e.metaKey) return;
+
+    const code = e.code;
+    const key = e.key ? e.key.toLowerCase() : '';
+
+    if (code === 'KeyM' || key === 'm') {
+        e.preventDefault();
+        toggleMenu();
+    } else if (code === 'KeyF' || key === 'f') {
+        e.preventDefault();
+        toggleFilterMenu();
+    } else if (code === 'KeyL' || key === 'l') {
+        e.preventDefault();
+        loadAllPosts();
+    } else if (code === 'KeyG' || key === 'g') {
+        e.preventDefault();
+        toggleLayout();
+    }
+}, true);
+// Automatically turns "Please wait..." into static text with no hover effects
+const waitObserver = new MutationObserver(() => {
+    const filterMenu = document.getElementById('filterMenu');
+    if (!filterMenu) return;
+    
+    filterMenu.querySelectorAll('a').forEach(link => {
+        if (link.textContent.includes('Please wait...')) {
+            const staticDiv = document.createElement('div');
+            staticDiv.textContent = link.textContent;
+            staticDiv.style.cssText = "padding: 10px 15px; font-family: 'Cinzel', serif; font-size: 13px; text-transform: uppercase; letter-spacing: 0.05em; text-align: center; color: #ffcc00; opacity: 0.6; cursor: default; background: none;";
+            link.replaceWith(staticDiv);
+        }
+    });
+});
+
+const filterMenuEl = document.getElementById('filterMenu');
+if (filterMenuEl) {
+    waitObserver.observe(filterMenuEl, { childList: true, subtree: true });
+}
+
+// ==========================================
+// STANDALONE SORT BUTTON SYSTEM + HOTKEY (S)
+// ==========================================
+(function() {
+    let isOldestFirst = false;
+
+    // 1. Create the button dynamically
+    const sortBtn = document.createElement('button');
+    sortBtn.className = 'toggle-btn';
+    sortBtn.id = 'standaloneSortBtn';
+    sortBtn.innerText = 'Newest First';
+    sortBtn.style.display = 'none';
+
+    // 2. Inject it directly to the left of the Load All button
+    function injectSortBtn() {
+        const loadBtnWrapper = document.querySelector('.load-btn-wrapper') || document.getElementById('loadAllBtn');
+        if (loadBtnWrapper && loadBtnWrapper.parentNode) {
+            loadBtnWrapper.parentNode.insertBefore(sortBtn, loadBtnWrapper);
+        }
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', injectSortBtn);
+    } else {
+        injectSortBtn();
+    }
+
+    // 3. Sorting behavior
+    sortBtn.onclick = function() {
+        const container = document.getElementById('contentContainer');
+        if (!container) return;
+
+        const posts = Array.from(container.querySelectorAll('article.post'));
+        isOldestFirst = !isOldestFirst;
+
+        posts.reverse().forEach(post => container.appendChild(post));
+        sortBtn.innerText = isOldestFirst ? "Oldest First" : "Newest First";
+    };
+
+    // 4. Background observer to reveal the button when "ALL LOADED" appears
+    const observer = new MutationObserver(() => {
+        const loadBtnText = document.getElementById('loadAllBtnText');
+        const isFinished = (loadBtnText && loadBtnText.innerText.toUpperCase().includes('ALL LOADED')) || 
+                           (typeof allLogsLoaded !== 'undefined' && allLogsLoaded === true);
+
+        if (isFinished && sortBtn.style.display === 'none') {
+            sortBtn.style.display = 'inline-block';
+        }
+    });
+
+    observer.observe(document.body, { childList: true, subtree: true, characterData: true });
+
+    // 5. Hotkey Listener ('S')
+    document.addEventListener('keydown', function(e) {
+        const activeTag = document.activeElement ? document.activeElement.tagName : '';
+        if (['INPUT', 'TEXTAREA', 'SELECT'].includes(activeTag) || (document.activeElement && document.activeElement.isContentEditable)) {
+            return;
+        }
+
+        if ((e.key === 's' || e.key === 'S') && !e.ctrlKey && !e.altKey && !e.metaKey) {
+            if (sortBtn && sortBtn.style.display !== 'none') {
+                e.preventDefault();
+                sortBtn.click();
+            }
+        }
+    });
+})();
+// ==========================================
+// STANDALONE WOW QUEST ICON SYSTEM
+// ==========================================
+(function() {
+    const QUEST_KEY = 'serbeeni_guide_quest_completed';
+    const QUEST_ICON_URL = 'https://64.media.tumblr.com/879214c326e36d1ec6713bd148e2aabb/cb8df1330f8f6fd5-8b/s540x810/f4779ddc30adcee5a67705e945de9009e9c301e8.pnj';
+
+    // 1. If Guide quest was already completed in the past, do nothing
+    if (localStorage.getItem(QUEST_KEY) === 'true') {
+        return;
+    }
+
+    function initQuestIcons() {
+        const menuContainer = document.querySelector('.menu-container');
+        if (!menuContainer) return;
+
+        // 2. Attach floating quest icon above MENU button if not already present
+        if (!document.getElementById('wowFloatingQuestIcon')) {
+            menuContainer.style.position = 'relative';
+            const floatingIcon = document.createElement('img');
+            floatingIcon.src = QUEST_ICON_URL;
+            floatingIcon.className = 'quest-icon-above';
+            floatingIcon.id = 'wowFloatingQuestIcon';
+            menuContainer.appendChild(floatingIcon);
+        }
+
+        // 3. Append icon & quest cursor to the "Guide" link inside dropdown
+        const guideLinks = document.querySelectorAll('#dropdownMenu a, .dropdown-content a');
+        guideLinks.forEach(link => {
+            if (link.textContent.trim().toLowerCase().includes('guide')) {
+                link.classList.add('has-quest-cursor');
+
+                if (!link.querySelector('.quest-icon-inline')) {
+                    const inlineIcon = document.createElement('img');
+                    inlineIcon.src = QUEST_ICON_URL;
+                    inlineIcon.className = 'quest-icon-inline';
+                    link.appendChild(inlineIcon); // Appends to the RIGHT of the text
+                }
+            }
+        });
+    }
+
+    // Init on load
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initQuestIcons);
+    } else {
+        initQuestIcons();
+    }
+
+    // 4. Click event listeners for hiding icons and removing quest cursor
+    document.addEventListener('click', function(e) {
+        const target = e.target;
+
+        // Clicking MENU button hides ONLY the floating icon above MENU
+        const menuBtn = target.closest('.menu-container button, [onclick*="toggleMenu"]');
+        if (menuBtn) {
+            const floating = document.getElementById('wowFloatingQuestIcon');
+            if (floating) floating.remove();
+        }
+
+        // Clicking GUIDE link completes quest permanently, removes icons, and strips cursor class
+        const guideLink = target.closest('#dropdownMenu a, .dropdown-content a');
+        if (guideLink && guideLink.textContent.toLowerCase().includes('guide')) {
+            localStorage.setItem(QUEST_KEY, 'true');
+            const floating = document.getElementById('wowFloatingQuestIcon');
+            const inlines = document.querySelectorAll('.quest-icon-inline');
+            const questLinks = document.querySelectorAll('.has-quest-cursor');
+
+            if (floating) floating.remove();
+            inlines.forEach(icon => icon.remove());
+            questLinks.forEach(link => link.classList.remove('has-quest-cursor'));
+        }
+    });
+})();
+</script>
+
+<div class="version-tag">v3.2.3</div>
+<!-- Music Toggle Button -->
+<div class="music-control-wrapper">
+    <button class="toggle-btn" id="musicToggleBtn" onclick="toggleMusic()" aria-label="Toggle Music"><s>♪</s></button>
+    <div id="nowPlayingTrack">
+        <span id="nowPlayingText"></span>
+        <input type="range" id="volumeSlider" min="0" max="100" value="100" oninput="changeVolume(this.value)" aria-label="Volume Control">
+    </div>
+</div>
+
+<!-- Hidden YouTube Container -->
+<div id="youtube-audio-player" style="position: fixed; left: -9999px; top: -9999px; width: 1px; height: 1px; opacity: 0; pointer-events: none;"></div>
+
+<script>
+var tag = document.createElement('script');
+tag.src = "https://www.youtube.com/iframe_api";
+var firstScriptTag = document.getElementsByTagName('script')[0];
+firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+let ytPlayer;
+let isPlayerReady = false;
+let isFirstPlay = true;
+let isPlaying = false;
+
+const DARNASSUS_VIDEO_ID = 'LYhknuaKiTo';
+const WOW_PLAYLIST_ID = 'PL61E5E1012F567279';
+
+function onYouTubeIframeAPIReady() {
+    ytPlayer = new YT.Player('youtube-audio-player', {
+        height: '1',
+        width: '1',
+        videoId: DARNASSUS_VIDEO_ID,
+        playerVars: {
+            'autoplay': 0,
+            'controls': 0,
+            'disablekb': 1
+        },
+        events: {
+            'onReady': function() { isPlayerReady = true; },
+            'onStateChange': onPlayerStateChange
+        }
+    });
+}
+
+function updateTrackTitleDisplay() {
+    const textSpan = document.getElementById('nowPlayingText');
+    const trackBadge = document.getElementById('nowPlayingTrack');
+    if (!textSpan || !trackBadge || !ytPlayer || typeof ytPlayer.getVideoData !== 'function') return;
+
+    const data = ytPlayer.getVideoData();
+    if (data && data.title && isPlaying) {
+        textSpan.innerText = '♪ ' + data.title;
+        trackBadge.classList.add('has-track');
+    } else {
+        trackBadge.classList.remove('has-track');
+    }
+}
+
+function onPlayerStateChange(event) {
+    if (event.data === YT.PlayerState.ENDED && isPlaying) {
+        ytPlayer.seekTo(0);
+        ytPlayer.playVideo();
+    }
+
+    if (event.data === YT.PlayerState.PLAYING) {
+        updateTrackTitleDisplay();
+    }
+}
+
+function playRandomPlaylistTrack() {
+    const randomIndex = Math.floor(Math.random() * 50);
+    ytPlayer.loadPlaylist({
+        list: WOW_PLAYLIST_ID,
+        listType: 'playlist',
+        index: randomIndex
+    });
+}
+
+window.changeVolume = function(val) {
+    if (ytPlayer && typeof ytPlayer.setVolume === 'function') {
+        ytPlayer.setVolume(val);
+    }
+};
+
+window.toggleMusic = function() {
+    const btn = document.getElementById('musicToggleBtn');
+    const trackBadge = document.getElementById('nowPlayingTrack');
+    if (!isPlayerReady) return;
+
+    if (!isPlaying) {
+        if (isFirstPlay) {
+            ytPlayer.loadVideoById(DARNASSUS_VIDEO_ID);
+            ytPlayer.playVideo();
+            isFirstPlay = false;
+        } else {
+            playRandomPlaylistTrack();
+        }
+        isPlaying = true;
+        if (btn) btn.innerHTML = "♪";
+    } else {
+        ytPlayer.pauseVideo();
+        isPlaying = false;
+        if (btn) btn.innerHTML = "<s>♪</s>";
+        if (trackBadge) trackBadge.classList.remove('has-track');
+    }
+};
+
+document.addEventListener('keydown', function(e) {
+    const activeTag = document.activeElement ? document.activeElement.tagName : '';
+    if (['INPUT', 'TEXTAREA', 'SELECT'].includes(activeTag) || (document.activeElement && document.activeElement.isContentEditable)) {
+        return;
+    }
+
+    if ((e.ctrlKey || e.metaKey) && (e.key === 'm' || e.key === 'M')) {
+        e.preventDefault();
+        window.toggleMusic();
+    }
+});
+</script>
+</body>
+</html>
