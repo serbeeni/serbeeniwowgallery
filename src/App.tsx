@@ -41,6 +41,11 @@ export default function App() {
   const showBackToTop = useBackToTop()
   const { groups, visiblePosts, setFilter } = useFilters(posts)
 
+  // Detect if we are currently viewing a Tumblr Custom Page
+  const customPageEl = typeof document !== 'undefined' ? document.getElementById('custom-page-data') : null
+  const customPageHtml = customPageEl?.innerHTML
+  const customPageTitle = customPageEl?.getAttribute('data-title')
+
   const displayedPosts = useMemo(
     () => (sortOldestFirst ? visiblePosts.slice().reverse() : visiblePosts),
     [visiblePosts, sortOldestFirst],
@@ -87,37 +92,51 @@ export default function App() {
         descriptionHtml={tumblrConfig.descriptionHtml}
       />
 
-      <ControlsBar
-        pages={tumblrConfig.pages}
-        openMenu={menus.openMenu}
-        onToggleMenu={menus.toggle}
-        onCloseMenus={menus.closeAll}
-        quest={quest}
-        filterGroups={groups}
-        filtersReady={allLoaded || !hasMore}
-        onSelectFilter={setFilter}
-        isBatchLoading={isBatchLoading}
-        allLoaded={allLoaded}
-        progress={progress}
-        progressActive={progressActive}
-        onLoadAll={loadAll}
-        sortOldestFirst={sortOldestFirst}
-        onToggleSort={toggleSort}
-        viewMode={viewMode}
-        onToggleLayout={toggleLayout}
-      />
+      {/* IF CUSTOM PAGE: Render the custom page body */}
+      {customPageHtml ? (
+        <main className="custom-page-wrapper">
+          {customPageTitle && <h2 className="custom-page-title">{customPageTitle}</h2>}
+          <div 
+            className="post-body-render custom-page-content"
+            dangerouslySetInnerHTML={{ __html: customPageHtml }} 
+          />
+        </main>
+      ) : (
+        /* OTHERWISE: Render standard blog feed and controls */
+        <>
+          <ControlsBar
+            pages={tumblrConfig.pages}
+            openMenu={menus.openMenu}
+            onToggleMenu={menus.toggle}
+            onCloseMenus={menus.closeAll}
+            quest={quest}
+            filterGroups={groups}
+            filtersReady={allLoaded || !hasMore}
+            onSelectFilter={setFilter}
+            isBatchLoading={isBatchLoading}
+            allLoaded={allLoaded}
+            progress={progress}
+            progressActive={progressActive}
+            onLoadAll={loadAll}
+            sortOldestFirst={sortOldestFirst}
+            onToggleSort={toggleSort}
+            viewMode={viewMode}
+            onToggleLayout={toggleLayout}
+          />
 
-      <PostList
-        posts={displayedPosts}
-        viewMode={viewMode}
-        onSelect={selectPost}
-        onImageClick={lightbox.open}
-      />
+          <PostList
+            posts={displayedPosts}
+            viewMode={viewMode}
+            onSelect={selectPost}
+            onImageClick={lightbox.open}
+          />
 
-      {isFetching && (
-        <div className="infinite-scroll-status" id="scrollStatus">
-          Loading...
-        </div>
+          {isFetching && (
+            <div className="infinite-scroll-status" id="scrollStatus">
+              Loading...
+            </div>
+          )}
+        </>
       )}
 
       <BackToTop visible={showBackToTop} />
