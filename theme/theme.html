@@ -41,6 +41,13 @@
     <span data-field="title">{Title}</span>
     {block:Description}<div data-field="description">{Description}</div>{/block:Description}
     <div data-field="pages">{block:HasPages}{block:Pages}<a href="{URL}">{Label}</a>{/block:Pages}{/block:HasPages}</div>
+
+    <!-- NEW: Feeds page body content directly into React -->
+    {block:CustomPage}
+        <div id="custom-page-data" data-title="{PageTitle}">
+            {Body}
+        </div>
+    {/block:CustomPage}
 </div>
 
 <div id="tumblr-source">
