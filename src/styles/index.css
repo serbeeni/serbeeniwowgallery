@@ -1,9 +1,10 @@
-/* Order matters — later files override earlier ones, as in the original single stylesheet. */
+/* Order matters - later files override earlier ones, as in the original single stylesheet. */
 @import './base.css';
 @import './header.css';
 @import './controls.css';
 @import './dropdown.css';
 @import './posts.css';
+@import './pages.css';
 @import './music.css';
 @import './lightbox.css';
 @import './cursors.css';
