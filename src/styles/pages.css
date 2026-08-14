@@ -1,0 +1,27 @@
+.custom-page-wrapper {
+  max-width: 900px;
+  margin: 2rem auto 4rem;
+  padding: 2.5rem;
+  background: var(--card-bg);
+  border-style: solid;
+  border-width: 28px;
+  border-image-source: url(https://64.media.tumblr.com/265b54e0678d3c1fb514c528bf74596f/2b2e4c379a19f487-c8/s250x400/f8768a3be47882762c529bcdb96adf22de796eee.pnj);
+  border-image-slice: 45 fill;
+  border-image-repeat: repeat;
+  box-shadow: 0 12px 35px #00000080;
+  color: var(--text-main);
+}
+
+.custom-page-title {
+  font-family: Cinzel, serif;
+  font-size: 2rem;
+  color: #fc0;
+  text-shadow: 1px 1px 0 #000;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.custom-page-content p {
+  margin-bottom: 1rem;
+  line-height: 1.6;
+}
